@@ -33,8 +33,18 @@ describe('resource schedules', () => {
         computer_use_enabled: true,
         environment_id: 'environment_id',
         harness: { type: 'oz' },
-        harness_auth_secrets: { claude_auth_secret_name: 'claude_auth_secret_name' },
+        harness_auth_secrets: {
+          claude_auth_secret_name: 'claude_auth_secret_name',
+          codex_auth_secret_name: 'codex_auth_secret_name',
+        },
         idle_timeout_minutes: 1,
+        inference_providers: {
+          aws: {
+            disabled: true,
+            region: 'region',
+            role_arn: 'role_arn',
+          },
+        },
         mcp_servers: {
           foo: {
             args: ['string'],
@@ -45,10 +55,18 @@ describe('resource schedules', () => {
             warp_id: 'warp_id',
           },
         },
+        memory_stores: [
+          {
+            access: 'read_write',
+            instructions: 'instructions',
+            uid: 'uid',
+          },
+        ],
         model_id: 'model_id',
         name: 'name',
         session_sharing: { public_access: 'VIEWER' },
         skill_spec: 'skill_spec',
+        skills: ['string'],
         worker_host: 'worker_host',
       },
       agent_uid: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
@@ -98,8 +116,18 @@ describe('resource schedules', () => {
         computer_use_enabled: true,
         environment_id: 'environment_id',
         harness: { type: 'oz' },
-        harness_auth_secrets: { claude_auth_secret_name: 'claude_auth_secret_name' },
+        harness_auth_secrets: {
+          claude_auth_secret_name: 'claude_auth_secret_name',
+          codex_auth_secret_name: 'codex_auth_secret_name',
+        },
         idle_timeout_minutes: 1,
+        inference_providers: {
+          aws: {
+            disabled: true,
+            region: 'region',
+            role_arn: 'role_arn',
+          },
+        },
         mcp_servers: {
           foo: {
             args: ['string'],
@@ -110,10 +138,18 @@ describe('resource schedules', () => {
             warp_id: 'warp_id',
           },
         },
+        memory_stores: [
+          {
+            access: 'read_write',
+            instructions: 'instructions',
+            uid: 'uid',
+          },
+        ],
         model_id: 'model_id',
         name: 'name',
         session_sharing: { public_access: 'VIEWER' },
         skill_spec: 'skill_spec',
+        skills: ['string'],
         worker_host: 'worker_host',
       },
       agent_uid: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',

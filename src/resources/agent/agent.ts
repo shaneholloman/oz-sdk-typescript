@@ -246,9 +246,19 @@ export interface AmbientAgentConfig {
   idle_timeout_minutes?: number;
 
   /**
+   * Inference provider settings used for LLM calls.
+   */
+  inference_providers?: AmbientAgentConfig.InferenceProviders;
+
+  /**
    * Map of MCP server configurations by name
    */
   mcp_servers?: { [key: string]: McpServerConfig };
+
+  /**
+   * Memory stores to attach to this run.
+   */
+  memory_stores?: Array<AmbientAgentConfig.MemoryStore>;
 
   /**
    * LLM model to use (uses team default if not specified)
@@ -274,12 +284,22 @@ export interface AmbientAgentConfig {
   session_sharing?: AmbientAgentConfig.SessionSharing;
 
   /**
-   * Skill specification identifying which agent skill to use. Format:
+   * Skill specification identifying the primary agent skill to use. Format:
    * "{owner}/{repo}:{skill_path}" Example:
-   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Use the list agents
-   * endpoint to discover available skills.
+   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Mutually exclusive with
+   * skills in create/update requests. Responses include the first skills entry here
+   * for backward compatibility. Use the list agents endpoint to discover available
+   * skills.
    */
   skill_spec?: string;
+
+  /**
+   * Ordered skill specifications to attach to the run. Format:
+   * "{owner}/{repo}:{skill_path}" Example:
+   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Mutually exclusive with
+   * skill_spec in create/update requests.
+   */
+  skills?: Array<string>;
 
   /**
    * Self-hosted worker ID that should execute this task. If not specified or set to
@@ -316,6 +336,65 @@ export namespace AmbientAgentConfig {
      * type is "claude".
      */
     claude_auth_secret_name?: string;
+
+    /**
+     * Name of a managed secret for Codex harness authentication. The secret must exist
+     * within the caller's personal or team scope. Only applicable when harness type is
+     * "codex".
+     */
+    codex_auth_secret_name?: string;
+  }
+
+  /**
+   * Inference provider settings used for LLM calls.
+   */
+  export interface InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    aws?: InferenceProviders.Aws;
+  }
+
+  export namespace InferenceProviders {
+    /**
+     * Configures AWS Bedrock as the LLM inference provider for this agent or run.
+     */
+    export interface Aws {
+      /**
+       * If true, opt out of Bedrock at this layer.
+       */
+      disabled?: boolean;
+
+      /**
+       * AWS region used for STS when assuming the Bedrock inference role.
+       */
+      region?: string;
+
+      /**
+       * IAM role ARN to assume when calling Bedrock.
+       */
+      role_arn?: string;
+    }
+  }
+
+  /**
+   * Reference to a memory store to attach to an agent.
+   */
+  export interface MemoryStore {
+    /**
+     * Access level for the store.
+     */
+    access: 'read_write' | 'read_only';
+
+    /**
+     * Instructions for how the agent should use this memory store. Must not be empty.
+     */
+    instructions: string;
+
+    /**
+     * UID of the memory store.
+     */
+    uid: string;
   }
 
   /**
@@ -625,6 +704,11 @@ export interface GcpProviderConfig {
    * Workload Identity Federation provider ID
    */
   workload_identity_federation_provider_id: string;
+
+  /**
+   * Optional GCP service account email to impersonate
+   */
+  service_account_email?: string;
 }
 
 /**
@@ -1025,7 +1109,7 @@ export interface AgentRunParams {
 
   /**
    * The prompt/instruction for the agent to execute. Required unless a skill is
-   * specified via the skill field or config.skill_spec.
+   * specified via the skill field, config.skill_spec, or config.skills.
    */
   prompt?: string;
 
