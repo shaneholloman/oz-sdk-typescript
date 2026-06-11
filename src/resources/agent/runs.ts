@@ -347,14 +347,6 @@ export interface RunItem {
   executor?: AgentAPI.UserProfile;
 
   /**
-   * Whether the run's type is eligible for cancellation via the API.
-   * State-independent: false for GitHub Action and local runs; true for all other
-   * run types (including self-hosted). Clients should still gate the control on the
-   * run's current state.
-   */
-  is_run_type_cancellable?: boolean;
-
-  /**
    * Whether the sandbox environment is currently running
    */
   is_sandbox_running?: boolean;
