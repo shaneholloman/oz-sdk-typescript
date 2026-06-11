@@ -92,7 +92,6 @@ export class Runs extends APIResource {
    * ```ts
    * const response = await client.agent.runs.submitFollowup(
    *   'runId',
-   *   { message: 'message' },
    * );
    * ```
    */
@@ -348,6 +347,14 @@ export interface RunItem {
   executor?: AgentAPI.UserProfile;
 
   /**
+   * Whether the run's type is eligible for cancellation via the API.
+   * State-independent: false for GitHub Action and local runs; true for all other
+   * run types (including self-hosted). Clients should still gate the control on the
+   * run's current state.
+   */
+  is_run_type_cancellable?: boolean;
+
+  /**
    * Whether the sandbox environment is currently running
    */
   is_sandbox_running?: boolean;
@@ -361,6 +368,12 @@ export interface RunItem {
    * Resource usage information for the run
    */
   request_usage?: RunItem.RequestUsage;
+
+  /**
+   * Total runtime as an ISO 8601 duration (e.g. "PT2M30S"), computed server-side
+   * from run executions.
+   */
+  run_time?: string;
 
   /**
    * Information about the schedule that triggered this run (only present for
@@ -735,7 +748,7 @@ export interface RunSubmitFollowupParams {
   /**
    * The follow-up message to send to the run.
    */
-  message: string;
+  message?: string;
 
   /**
    * Optional query mode for the follow-up. Defaults to `normal` when omitted. The
