@@ -51,17 +51,17 @@
   },
   "overrides": {
     "flatted": "^3.4.2",
-    "minimatch": "^9.0.7"
+    "minimatch": "^9.0.5"
   },
   "pnpm": {
     "overrides": {
       "flatted": "^3.4.2",
-      "minimatch": "^9.0.7"
+      "minimatch": "^9.0.5"
     }
   },
   "resolutions": {
     "flatted": "^3.4.2",
-    "minimatch": "^9.0.7"
+    "minimatch": "^9.0.5"
   },
   "exports": {
     ".": {
