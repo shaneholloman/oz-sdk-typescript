@@ -54,8 +54,7 @@
     "minimatch": "^9.0.5",
     "js-yaml": "4.2.0",
     "handlebars": "4.7.9",
-    "picomatch": ">=2.3.2",
-    "@babel/core": ">=7.29.6"
+    "picomatch": ">=2.3.2"
   },
   "pnpm": {
     "overrides": {
@@ -63,8 +62,7 @@
       "minimatch": "^9.0.5",
       "js-yaml": "4.2.0",
       "handlebars": "4.7.9",
-      "picomatch": ">=2.3.2",
-      "@babel/core": ">=7.29.6"
+      "picomatch": ">=2.3.2"
     }
   },
   "resolutions": {
@@ -72,8 +70,7 @@
     "minimatch": "^9.0.5",
     "js-yaml": "4.2.0",
     "handlebars": "4.7.9",
-    "picomatch": ">=2.3.2",
-    "@babel/core": ">=7.29.6"
+    "picomatch": ">=2.3.2"
   },
   "exports": {
     ".": {
