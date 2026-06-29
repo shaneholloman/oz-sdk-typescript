@@ -53,21 +53,27 @@
     "flatted": "^3.4.2",
     "minimatch": "^9.0.5",
     "js-yaml": "4.2.0",
-    "handlebars": "4.7.9"
+    "handlebars": "4.7.9",
+    "picomatch": ">=2.3.2",
+    "@babel/core": ">=7.29.6"
   },
   "pnpm": {
     "overrides": {
       "flatted": "^3.4.2",
       "minimatch": "^9.0.5",
       "js-yaml": "4.2.0",
-      "handlebars": "4.7.9"
+      "handlebars": "4.7.9",
+      "picomatch": ">=2.3.2",
+      "@babel/core": ">=7.29.6"
     }
   },
   "resolutions": {
     "flatted": "^3.4.2",
     "minimatch": "^9.0.5",
     "js-yaml": "4.2.0",
-    "handlebars": "4.7.9"
+    "handlebars": "4.7.9",
+    "picomatch": ">=2.3.2",
+    "@babel/core": ">=7.29.6"
   },
   "exports": {
     ".": {
