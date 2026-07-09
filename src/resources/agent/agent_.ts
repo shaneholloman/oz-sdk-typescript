@@ -162,6 +162,12 @@ export interface AgentResponse {
   environment_id?: string;
 
   /**
+   * UID of the Factory this agent was seeded for. Null (or omitted) for agents that
+   * do not belong to a factory.
+   */
+  factory_uid?: string | null;
+
+  /**
    * Authentication secrets for third-party harnesses. Only the secret for the
    * harness specified gets injected into the environment.
    */
