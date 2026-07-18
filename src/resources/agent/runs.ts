@@ -110,7 +110,8 @@ export type ArtifactItem =
   | ArtifactItem.PlanArtifact
   | ArtifactItem.PullRequestArtifact
   | ArtifactItem.ScreenshotArtifact
-  | ArtifactItem.FileArtifact;
+  | ArtifactItem.FileArtifact
+  | ArtifactItem.ExternalReferenceArtifact;
 
 export namespace ArtifactItem {
   export interface PlanArtifact {
@@ -263,6 +264,52 @@ export namespace ArtifactItem {
        * Size of the uploaded file in bytes
        */
       size_bytes?: number;
+    }
+  }
+
+  export interface ExternalReferenceArtifact {
+    /**
+     * Type of the artifact
+     */
+    artifact_type: 'EXTERNAL_REFERENCE';
+
+    /**
+     * Timestamp when the artifact was created (RFC3339)
+     */
+    created_at: string;
+
+    /**
+     * Data for a generic external reference artifact.
+     */
+    data: ExternalReferenceArtifact.Data;
+  }
+
+  export namespace ExternalReferenceArtifact {
+    /**
+     * Data for a generic external reference artifact.
+     */
+    export interface Data {
+      /**
+       * Free-form category identifier for this reference (e.g. "linear_issue",
+       * "spec_link", "jira_ticket"). Used for filtering and display.
+       */
+      reference_type: string;
+
+      /**
+       * Canonical URL for the reference. Used as the key for reverse lookups ("which run
+       * produced this URL?").
+       */
+      url: string;
+
+      /**
+       * Optional category-specific extra fields.
+       */
+      metadata?: { [key: string]: unknown };
+
+      /**
+       * Optional human-readable label for the reference.
+       */
+      title?: string;
     }
   }
 }
@@ -651,7 +698,7 @@ export interface RunListParams extends RunsCursorPageParams {
   /**
    * Filter runs by artifact type
    */
-  artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE';
+  artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE' | 'EXTERNAL_REFERENCE';
 
   /**
    * Filter runs created after this timestamp (RFC3339 format)
