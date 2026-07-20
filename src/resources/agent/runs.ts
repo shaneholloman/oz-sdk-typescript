@@ -407,6 +407,17 @@ export interface RunItem {
   is_sandbox_running?: boolean;
 
   /**
+   * Custom key/value metadata attached to a run at creation time and immutable
+   * afterward. At most 20 keys. Keys are 1-64 bytes matching [a-zA-Z0-9._-]+
+   * (case-sensitive); values are 0-256 bytes of UTF-8 and cannot contain NUL
+   * characters. Requests with invalid metadata are rejected. A run's effective
+   * metadata is merged per key at creation: explicit request keys override keys
+   * inherited from the parent run, which override automatic keys (ticket_id and
+   * ticket_source on Linear- and Jira-triggered runs).
+   */
+  metadata?: { [key: string]: string };
+
+  /**
    * UUID of the parent run that spawned this run
    */
   parent_run_id?: string;
