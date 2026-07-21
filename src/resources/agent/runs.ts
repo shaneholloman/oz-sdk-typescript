@@ -264,6 +264,13 @@ export namespace ArtifactItem {
        * Size of the uploaded file in bytes
        */
       size_bytes?: number;
+
+      /**
+       * Short, badge-visible label for the artifact. For recording artifacts, this is
+       * the agent-authored title shown in Oz web and blocklist badges. Distinct from
+       * description, which is longer and shown in detail views.
+       */
+      title?: string;
     }
   }
 
