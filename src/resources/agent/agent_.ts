@@ -99,6 +99,19 @@ export interface AgentResponse {
   created_at: string;
 
   /**
+   * Default runner UID for runs executed by this agent. When set, it overrides the
+   * selected environment's default runner for runs that do not specify their own
+   * `runner_id`. The precedence order for runner resolution is:
+   *
+   * 1. The runner specified on the run itself
+   * 2. The agent's default runner
+   * 3. The selected environment's default runner
+   * 4. The environment's legacy inline compute fields
+   * 5. System defaults
+   */
+  default_runner_uid: string;
+
+  /**
    * Memory settings for an agent.
    */
   memory: AgentResponse.Memory;
@@ -375,6 +388,14 @@ export interface CreateAgentRequest {
   base_model?: string | null;
 
   /**
+   * Optional default runner UID for runs executed by this agent. When set, it
+   * overrides the selected environment's default runner for runs that do not specify
+   * their own `runner_id`. The editor must have View permission on the referenced
+   * runner.
+   */
+  default_runner_uid?: string | null;
+
+  /**
    * Optional description of the agent
    */
   description?: string | null;
@@ -579,6 +600,13 @@ export interface UpdateAgentRequest {
   base_model?: string | null;
 
   /**
+   * Replacement default runner UID. Omit or pass `null` to leave unchanged, or pass
+   * an empty string to clear. A non-empty value must reference a runner the editor
+   * can View.
+   */
+  default_runner_uid?: string | null;
+
+  /**
    * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
    * value to clear.
    */
@@ -755,6 +783,14 @@ export interface AgentCreateParams {
    * Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
+
+  /**
+   * Optional default runner UID for runs executed by this agent. When set, it
+   * overrides the selected environment's default runner for runs that do not specify
+   * their own `runner_id`. The editor must have View permission on the referenced
+   * runner.
+   */
+  default_runner_uid?: string | null;
 
   /**
    * Optional description of the agent
@@ -948,6 +984,13 @@ export interface AgentUpdateParams {
    * string to clear.
    */
   base_model?: string | null;
+
+  /**
+   * Replacement default runner UID. Omit or pass `null` to leave unchanged, or pass
+   * an empty string to clear. A non-empty value must reference a runner the editor
+   * can View.
+   */
+  default_runner_uid?: string | null;
 
   /**
    * Replacement description. Omit or pass `null` to leave unchanged, or use an empty
