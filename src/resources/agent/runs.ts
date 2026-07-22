@@ -750,6 +750,14 @@ export interface RunListParams extends RunsCursorPageParams {
   executor?: string;
 
   /**
+   * Filter by exact metadata key/value pairs using object notation (e.g.
+   * `metadata[ticket_id]=VIS-238`). Multiple pairs combine with AND semantics. At
+   * most 5 pairs per request. Returns `feature_not_available` when metadata
+   * filtering is not enabled.
+   */
+  metadata?: { [key: string]: string };
+
+  /**
    * Filter by model ID
    */
   model_id?: string;
