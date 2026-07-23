@@ -62,6 +62,7 @@ describe('resource agent', () => {
         ],
         auto_memory: { enabled: true },
       },
+      on_behalf_of_enabled: true,
       prompt: 'prompt',
       secrets: [{ name: 'name' }],
       skills: ['string'],

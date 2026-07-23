@@ -1135,6 +1135,16 @@ export interface AgentRunParams {
   mode?: 'normal' | 'plan' | 'orchestrate';
 
   /**
+   * Optional email address or user ID of a Warp user to attribute the run to. When
+   * set, the resolved user becomes the run's creator instead of the caller. Only
+   * agent API keys may use this field, and the calling agent must have on_behalf_of
+   * enabled in its configuration (`on_behalf_of_enabled`), which a team admin must
+   * intentionally turn on per agent. The target user must be an active member of the
+   * run's owner team. Only valid for team-owned runs.
+   */
+  on_behalf_of?: string;
+
+  /**
    * Optional run ID of the parent that spawned this run. Used for orchestration
    * hierarchies.
    */

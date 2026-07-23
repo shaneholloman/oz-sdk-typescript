@@ -207,6 +207,12 @@ export interface AgentResponse {
   mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
 
   /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member.
+   */
+  on_behalf_of_enabled?: boolean;
+
+  /**
    * Optional base prompt for this agent
    */
   prompt?: string | null;
@@ -435,6 +441,13 @@ export interface CreateAgentRequest {
   memory?: CreateAgentRequest.Memory;
 
   /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member. Defaults to false. Only team admins may
+   * set this field.
+   */
+  on_behalf_of_enabled?: boolean;
+
+  /**
    * Optional base prompt for this agent
    */
   prompt?: string | null;
@@ -647,6 +660,13 @@ export interface UpdateAgentRequest {
   name?: string;
 
   /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member. Omit or pass `null` to leave unchanged.
+   * Only team admins may set this field.
+   */
+  on_behalf_of_enabled?: boolean | null;
+
+  /**
    * Replacement prompt. Omit or pass `null` to leave unchanged, or use an empty
    * value to clear.
    */
@@ -830,6 +850,13 @@ export interface AgentCreateParams {
    * Memory settings for creating an agent.
    */
   memory?: AgentCreateParams.Memory;
+
+  /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member. Defaults to false. Only team admins may
+   * set this field.
+   */
+  on_behalf_of_enabled?: boolean;
 
   /**
    * Optional base prompt for this agent
@@ -1031,6 +1058,13 @@ export interface AgentUpdateParams {
    * The new name for the agent
    */
   name?: string;
+
+  /**
+   * Whether runs created with this agent's API key may use the on_behalf_of field to
+   * attribute runs to another team member. Omit or pass `null` to leave unchanged.
+   * Only team admins may set this field.
+   */
+  on_behalf_of_enabled?: boolean | null;
 
   /**
    * Replacement prompt. Omit or pass `null` to leave unchanged, or use an empty
