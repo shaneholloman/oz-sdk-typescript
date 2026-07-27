@@ -51,6 +51,7 @@
   },
   "overrides": {
     "@babel/core": "^7.29.6",
+    "brace-expansion": "^2.1.2",
     "flatted": "^3.4.2",
     "minimatch": "^9.0.7",
     "js-yaml": "4.2.0",
@@ -60,6 +61,7 @@
   "pnpm": {
     "overrides": {
       "@babel/core": "^7.29.6",
+      "brace-expansion": "^2.1.2",
       "flatted": "^3.4.2",
       "minimatch": "^9.0.7",
       "js-yaml": "4.2.0",
@@ -69,6 +71,7 @@
   },
   "resolutions": {
     "@babel/core": "^7.29.6",
+    "brace-expansion": "^2.1.2",
     "flatted": "^3.4.2",
     "minimatch": "^9.0.7",
     "js-yaml": "4.2.0",
