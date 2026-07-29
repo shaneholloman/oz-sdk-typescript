@@ -222,6 +222,22 @@ export interface AmbientAgentConfig {
   computer_use_enabled?: boolean;
 
   /**
+   * Controls which principal's credentials are used when the platform mints tokens
+   * (e.g. GitHub or GitLab OAuth tokens) on behalf of this run.
+   *
+   * - EXECUTOR (default when unset): credentials are sourced from the run's
+   *   execution principal. For agent principals this produces a GitHub App
+   *   installation token; for user principals this produces their personal OAuth
+   *   token.
+   * - CREATOR: credentials are always sourced from the run creator, regardless of
+   *   the execution principal. Useful when a service account executes the run but
+   *   Git operations should authenticate as the human who triggered it. When unset,
+   *   behavior is identical to EXECUTOR and no additional pre-flight validation is
+   *   performed.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
+
+  /**
    * UID of the environment to run the agent in
    */
   environment_id?: string;
