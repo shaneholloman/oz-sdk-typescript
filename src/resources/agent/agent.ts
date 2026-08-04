@@ -75,6 +75,10 @@ export class Agent extends APIResource {
    * a time-limited signed download URL. For plan artifacts, returns the current plan
    * content inline.
    *
+   * Public artifacts can be read without authentication; private artifacts require
+   * the caller to be authenticated and authorized. Anonymous reads of public file
+   * artifacts omit the `filepath` field.
+   *
    * @example
    * ```ts
    * const response = await client.agent.getArtifact(
@@ -1002,14 +1006,15 @@ export namespace AgentGetArtifactResponse {
       filename: string;
 
       /**
-       * Conversation-relative filepath for the uploaded file
-       */
-      filepath: string;
-
-      /**
        * Optional description of the file
        */
       description?: string;
+
+      /**
+       * Conversation-relative filepath for the uploaded file. Omitted for anonymous
+       * reads of public artifacts.
+       */
+      filepath?: string;
 
       /**
        * Size of the uploaded file in bytes
