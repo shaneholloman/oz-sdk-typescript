@@ -474,6 +474,7 @@ export interface RunItem {
    * - CLOUD_MODE: Created from a Cloud Mode
    * - CLI: Created from the CLI
    * - JIRA: Created from Jira integration
+   * - RUN_SCORER: Created by Warp's run-scoring judge
    */
   source?: RunSourceType;
 
@@ -624,6 +625,7 @@ export namespace RunItem {
  * - CLOUD_MODE: Created from a Cloud Mode
  * - CLI: Created from the CLI
  * - JIRA: Created from Jira integration
+ * - RUN_SCORER: Created by Warp's run-scoring judge
  */
 export type RunSourceType =
   | 'LINEAR'
@@ -635,7 +637,8 @@ export type RunSourceType =
   | 'GITHUB_ACTION'
   | 'CLOUD_MODE'
   | 'CLI'
-  | 'JIRA';
+  | 'JIRA'
+  | 'RUN_SCORER';
 
 /**
  * Current state of the run:
