@@ -294,6 +294,14 @@ export interface AmbientAgentConfig {
   name?: string;
 
   /**
+   * UID of the runner providing the run's compute (platform, instance shape, and
+   * setup commands). When omitted on a request, the runner is resolved at run
+   * creation from the agent's default runner, then the environment's default runner,
+   * and the resolved UID is recorded on the run.
+   */
+  runner_id?: string;
+
+  /**
    * Configures sharing behavior for the run's shared session. When set, the worker
    * emits `--share public:<level>` and the bundled Warp client applies an
    * anyone-with-link ACL to the shared session once it has bootstrapped. The same
