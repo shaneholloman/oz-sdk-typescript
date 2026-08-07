@@ -743,6 +743,12 @@ export interface RunListParams extends RunsCursorPageParams {
   artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE' | 'EXTERNAL_REFERENCE';
 
   /**
+   * Filter runs by the factory automation that dispatched them. Matches runs stamped
+   * with the automation_id metadata key at creation time.
+   */
+  automation_id?: string;
+
+  /**
    * Filter runs created after this timestamp (RFC3339 format)
    */
   created_after?: string;

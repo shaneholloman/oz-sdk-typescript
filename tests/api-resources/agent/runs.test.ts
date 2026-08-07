@@ -40,6 +40,7 @@ describe('resource runs', () => {
         {
           ancestor_run_id: 'ancestor_run_id',
           artifact_type: 'PLAN',
+          automation_id: 'automation_id',
           created_after: '2019-12-27T18:11:19.117Z',
           created_before: '2019-12-27T18:11:19.117Z',
           creator: 'creator',
