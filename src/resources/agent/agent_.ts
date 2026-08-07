@@ -169,6 +169,21 @@ export interface AgentResponse {
   base_model?: string;
 
   /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR';
+
+  /**
    * Optional description of the agent
    */
   description?: string | null;
@@ -394,6 +409,21 @@ export interface CreateAgentRequest {
   base_model?: string | null;
 
   /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
+
+  /**
    * Optional default runner UID for runs executed by this agent. When set, it
    * overrides the selected environment's default runner for runs that do not specify
    * their own `runner_id`. The editor must have View permission on the referenced
@@ -613,6 +643,21 @@ export interface UpdateAgentRequest {
   base_model?: string | null;
 
   /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
+
+  /**
    * Replacement default runner UID. Omit or pass `null` to leave unchanged, or pass
    * an empty string to clear. A non-empty value must reference a runner the editor
    * can View.
@@ -803,6 +848,21 @@ export interface AgentCreateParams {
    * Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
+
+  /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
   /**
    * Optional default runner UID for runs executed by this agent. When set, it
@@ -1011,6 +1071,21 @@ export interface AgentUpdateParams {
    * string to clear.
    */
   base_model?: string | null;
+
+  /**
+   * Default credential strategy for runs executed by a named agent.
+   *
+   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
+   *   GitHub App installation token for the agent's team).
+   * - CREATOR: runs authenticate with the credentials of the principal that created
+   *   the run. Unlike the factory default, an agent may leave this unset. The
+   *   strategy applied to a run is resolved in this order: the run's
+   *   config.credential_strategy, then the agent's default, then the factory's
+   *   default for factory-seeded agents, and finally EXECUTOR. The inherited
+   *   strategy is validated at run creation time (the required credential must be
+   *   mintable), like an explicit run-level value.
+   */
+  credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
   /**
    * Replacement default runner UID. Omit or pass `null` to leave unchanged, or pass

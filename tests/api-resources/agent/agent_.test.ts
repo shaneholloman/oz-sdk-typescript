@@ -27,6 +27,7 @@ describe('resource agent', () => {
       agent_type: 'FOREMAN',
       base_harness: 'base_harness',
       base_model: 'base_model',
+      credential_strategy: 'CREATOR',
       default_runner_uid: 'default_runner_uid',
       description: 'description',
       environment_id: 'environment_id',
