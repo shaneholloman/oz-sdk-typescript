@@ -474,6 +474,7 @@ export interface RunItem {
    * - CLOUD_MODE: Created from a Cloud Mode
    * - CLI: Created from the CLI
    * - JIRA: Created from Jira integration
+   * - AUTOFIX: Created by Warp's autofix pipeline
    * - RUN_SCORER: Created by Warp's run-scoring judge
    */
   source?: RunSourceType;
@@ -643,6 +644,7 @@ export namespace RunItem {
  * - CLOUD_MODE: Created from a Cloud Mode
  * - CLI: Created from the CLI
  * - JIRA: Created from Jira integration
+ * - AUTOFIX: Created by Warp's autofix pipeline
  * - RUN_SCORER: Created by Warp's run-scoring judge
  */
 export type RunSourceType =
@@ -656,6 +658,7 @@ export type RunSourceType =
   | 'CLOUD_MODE'
   | 'CLI'
   | 'JIRA'
+  | 'AUTOFIX'
   | 'RUN_SCORER';
 
 /**
