@@ -47,6 +47,7 @@ describe('resource runs', () => {
           environment_id: 'environment_id',
           execution_location: 'LOCAL',
           executor: 'executor',
+          factory_uid: 'factory_uid',
           limit: 1,
           metadata: { foo: 'string' },
           model_id: 'model_id',
