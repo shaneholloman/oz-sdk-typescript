@@ -527,19 +527,37 @@ export namespace RunItem {
    */
   export interface RequestUsage {
     /**
-     * Cost of compute resources for the run
+     * Credits consumed by compute resources for the run
      */
     compute_cost?: number;
 
     /**
-     * Cost of LLM inference for the run
+     * compute_cost in US dollars, converted at a fixed rate. An approximate cost, not
+     * a billed amount.
+     */
+    compute_cost_usd?: number;
+
+    /**
+     * Credits consumed by LLM inference for the run
      */
     inference_cost?: number;
 
     /**
-     * Cost of platform usage for the run
+     * inference_cost in US dollars, converted at a fixed rate. An approximate cost,
+     * not a billed amount.
+     */
+    inference_cost_usd?: number;
+
+    /**
+     * Credits consumed by platform usage for the run
      */
     platform_cost?: number;
+
+    /**
+     * platform_cost in US dollars, converted at a fixed rate. An approximate cost, not
+     * a billed amount.
+     */
+    platform_cost_usd?: number;
   }
 
   /**
