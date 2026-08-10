@@ -476,6 +476,8 @@ export interface RunItem {
    * - JIRA: Created from Jira integration
    * - AUTOFIX: Created by Warp's autofix pipeline
    * - RUN_SCORER: Created by Warp's run-scoring judge
+   * - ORCHESTRATION: Created as a child run by the orchestration layer
+   *   (parent_run_id set)
    */
   source?: RunSourceType;
 
@@ -657,6 +659,8 @@ export namespace RunItem {
  * - JIRA: Created from Jira integration
  * - AUTOFIX: Created by Warp's autofix pipeline
  * - RUN_SCORER: Created by Warp's run-scoring judge
+ * - ORCHESTRATION: Created as a child run by the orchestration layer
+ *   (parent_run_id set)
  */
 export type RunSourceType =
   | 'LINEAR'
@@ -670,7 +674,8 @@ export type RunSourceType =
   | 'CLI'
   | 'JIRA'
   | 'AUTOFIX'
-  | 'RUN_SCORER';
+  | 'RUN_SCORER'
+  | 'ORCHESTRATION';
 
 /**
  * Current state of the run:
