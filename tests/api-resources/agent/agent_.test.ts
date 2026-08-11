@@ -32,6 +32,11 @@ describe('resource agent', () => {
       description: 'description',
       environment_id: 'environment_id',
       factory_uid: 'factory_uid',
+      harness: {
+        model_id: 'model_id',
+        reasoning_level: 'reasoning_level',
+        type: 'oz',
+      },
       harness_auth_secrets: {
         claude_auth_secret_name: 'claude_auth_secret_name',
         codex_auth_secret_name: 'codex_auth_secret_name',
