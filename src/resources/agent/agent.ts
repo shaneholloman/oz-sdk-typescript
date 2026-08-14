@@ -221,7 +221,7 @@ export interface AmbientAgentConfig {
 
   /**
    * Controls whether computer use is enabled for this agent. If not set, defaults to
-   * true for runs on Warp's built-in harness and false for third-party harnesses.
+   * true.
    */
   computer_use_enabled?: boolean;
 
