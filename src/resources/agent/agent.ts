@@ -682,6 +682,11 @@ export interface Error {
   type: string;
 
   /**
+   * URL where the caller can reconnect the external provider.
+   */
+  auth_url?: string;
+
+  /**
    * A human-readable explanation specific to this occurrence of the problem
    * (RFC 7807)
    */
@@ -691,6 +696,11 @@ export interface Error {
    * The request path that generated this error (RFC 7807)
    */
   instance?: string;
+
+  /**
+   * External provider that requires authorization, such as `linear`.
+   */
+  provider?: string;
 
   /**
    * Whether the request can be retried. When true, the error is transient and the
