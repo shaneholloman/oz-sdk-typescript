@@ -538,8 +538,8 @@ export namespace RunItem {
     compute_cost?: number;
 
     /**
-     * compute_cost in US dollars, converted at a fixed rate. An approximate cost, not
-     * a billed amount.
+     * compute_cost in US dollars, converted at the owning team's current credit price.
+     * An approximate cost, not a billed amount.
      */
     compute_cost_usd?: number;
 
@@ -549,8 +549,8 @@ export namespace RunItem {
     inference_cost?: number;
 
     /**
-     * inference_cost in US dollars, converted at a fixed rate. An approximate cost,
-     * not a billed amount.
+     * inference_cost in US dollars, converted at the owning team's current credit
+     * price. An approximate cost, not a billed amount.
      */
     inference_cost_usd?: number;
 
@@ -560,8 +560,8 @@ export namespace RunItem {
     platform_cost?: number;
 
     /**
-     * platform_cost in US dollars, converted at a fixed rate. An approximate cost, not
-     * a billed amount.
+     * platform_cost in US dollars, converted at the owning team's current credit
+     * price. An approximate cost, not a billed amount.
      */
     platform_cost_usd?: number;
   }
