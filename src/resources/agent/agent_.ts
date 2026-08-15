@@ -89,7 +89,7 @@ export class Agent extends APIResource {
 
 export interface AgentResponse {
   /**
-   * Whether this agent is within the team's plan limit and can be used for runs
+   * Whether the agent is currently enabled. Defaults to true.
    */
   available: boolean;
 
