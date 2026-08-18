@@ -358,7 +358,7 @@ export namespace AgentResponse {
     /**
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a non-oz harness; the top-level config model_id targets the
-     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * built-in Warp harness instead. When omitted or empty, the harness uses its own
      * default model.
      */
     model_id?: string;
@@ -581,7 +581,7 @@ export namespace CreateAgentRequest {
     /**
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a non-oz harness; the top-level config model_id targets the
-     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * built-in Warp harness instead. When omitted or empty, the harness uses its own
      * default model.
      */
     model_id?: string;
@@ -862,7 +862,7 @@ export namespace UpdateAgentRequest {
     /**
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a non-oz harness; the top-level config model_id targets the
-     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * built-in Warp harness instead. When omitted or empty, the harness uses its own
      * default model.
      */
     model_id?: string;
@@ -1128,7 +1128,7 @@ export namespace AgentCreateParams {
     /**
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a non-oz harness; the top-level config model_id targets the
-     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * built-in Warp harness instead. When omitted or empty, the harness uses its own
      * default model.
      */
     model_id?: string;
@@ -1398,7 +1398,7 @@ export namespace AgentUpdateParams {
     /**
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a non-oz harness; the top-level config model_id targets the
-     * built-in Oz harness instead. When omitted or empty, the harness uses its own
+     * built-in Warp harness instead. When omitted or empty, the harness uses its own
      * default model.
      */
     model_id?: string;

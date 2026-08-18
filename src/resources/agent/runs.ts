@@ -267,7 +267,7 @@ export namespace ArtifactItem {
 
       /**
        * Short, badge-visible label for the artifact. For recording artifacts, this is
-       * the agent-authored title shown in Oz web and blocklist badges. Distinct from
+       * the agent-authored title shown in Warp web and blocklist badges. Distinct from
        * description, which is longer and shown in detail views.
        */
       title?: string;
@@ -393,7 +393,7 @@ export interface RunItem {
   /**
    * Where the run executed:
    *
-   * - LOCAL: Executed in the user's local Oz environment
+   * - LOCAL: Executed in the user's local Warp environment
    * - REMOTE: Executed by a remote/cloud worker
    */
   execution_location?: 'LOCAL' | 'REMOTE';
