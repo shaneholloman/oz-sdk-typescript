@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.4.0-alpha.6](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.5...v1.4.0-alpha.6) (2026-08-17)
+
+
+### Bug Fixes
+
+* bump js-yaml to 4.3.1 and brace-expansion to ^2.1.2 (CVE-2026-59869, CVE-2026-13149, GHSA-5p4m-2wfm-xmqj) ([#51](https://github.com/warpdotdev/oz-sdk-typescript/issues/51)) ([9c45fcb](https://github.com/warpdotdev/oz-sdk-typescript/commit/9c45fcb4c61fd07db76de833d07fd4b29e76d6b8))
+
+## [1.4.0-alpha.5](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.4...v1.4.0-alpha.5) (2026-07-23)
+
+
+### Features
+
+* add default runner, run metadata, factory APIs, and artifact reporting ([#47](https://github.com/warpdotdev/oz-sdk-typescript/issues/47)) ([d4d6b7c](https://github.com/warpdotdev/oz-sdk-typescript/commit/d4d6b7ced52fa8cd652e909e45ad829433627065))
+
+## [1.4.0-alpha.4](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.3...v1.4.0-alpha.4) (2026-07-07)
+
+
+### Bug Fixes
+
+* update flatted to resolve CVE-2026-33228 ([#32](https://github.com/warpdotdev/oz-sdk-typescript/issues/32)) ([4841416](https://github.com/warpdotdev/oz-sdk-typescript/commit/48414165a2fa1070ff1aa231a5fc309cf862daad))
+
 ## 1.4.0-alpha.3 (2026-05-22)
 
 Full Changelog: [v1.4.0-alpha.2...v1.4.0-alpha.3](https://github.com/warpdotdev/oz-sdk-typescript/compare/v1.4.0-alpha.2...v1.4.0-alpha.3)
