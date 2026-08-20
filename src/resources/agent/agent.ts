@@ -226,6 +226,15 @@ export interface AmbientAgentConfig {
   computer_use_enabled?: boolean;
 
   /**
+   * Model the computer use subagent runs on. If not set, the subagent picks its own
+   * model automatically. Only applies to the built-in Oz harness; the value is
+   * accepted but has no effect under a third-party harness or when computer use is
+   * disabled. Requires an agent CLI version that supports the --computer-use-model
+   * flag.
+   */
+  computer_use_model_id?: string;
+
+  /**
    * Controls which principal's credentials are used when the platform mints tokens
    * (e.g. GitHub or GitLab OAuth tokens) on behalf of this run.
    *

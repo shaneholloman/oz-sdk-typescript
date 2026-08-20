@@ -31,6 +31,7 @@ describe('resource schedules', () => {
       agent_config: {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
+        computer_use_model_id: 'computer_use_model_id',
         credential_strategy: 'CREATOR',
         environment_id: 'environment_id',
         harness: {
@@ -121,6 +122,7 @@ describe('resource schedules', () => {
       agent_config: {
         base_prompt: 'base_prompt',
         computer_use_enabled: true,
+        computer_use_model_id: 'computer_use_model_id',
         credential_strategy: 'CREATOR',
         environment_id: 'environment_id',
         harness: {
