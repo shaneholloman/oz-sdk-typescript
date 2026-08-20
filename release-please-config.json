@@ -3,6 +3,7 @@
     ".": {}
   },
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "bf862820a828375647c4988b3cac69bedf0d85d6",
   "include-v-in-tag": true,
   "include-component-in-tag": false,
   "versioning": "prerelease",
