@@ -100,3 +100,24 @@ Types:
 Methods:
 
 - <code title="get /agent/conversations/{conversationId}/redirect">client.agent.conversations.<a href="./src/resources/agent/conversations.ts">checkRedirect</a>(conversationID) -> ConversationCheckRedirectResponse</code>
+
+# Factories
+
+Types:
+
+- <code><a href="./src/resources/factories/factories.ts">Factory</a></code>
+
+Methods:
+
+- <code title="get /factory">client.factories.<a href="./src/resources/factories/factories.ts">list</a>({ ...params }) -> FactoriesFactoriesCursorPage</code>
+- <code title="get /factory/{uid}">client.factories.<a href="./src/resources/factories/factories.ts">get</a>(uid) -> Factory</code>
+
+## Runs
+
+Types:
+
+- <code><a href="./src/resources/factories/runs.ts">RunCreateResponse</a></code>
+
+Methods:
+
+- <code title="post /factory/{uid}/runs">client.factories.runs.<a href="./src/resources/factories/runs.ts">create</a>(uid, { ...params }) -> RunCreateResponse</code>

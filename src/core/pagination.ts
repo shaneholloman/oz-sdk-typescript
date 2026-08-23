@@ -171,3 +171,71 @@ export class RunsCursorPage<Item> extends AbstractPage<Item> implements RunsCurs
     };
   }
 }
+
+export interface FactoriesCursorPageResponse<Item> {
+  factories: Array<Item>;
+
+  page_info: FactoriesCursorPageResponse.PageInfo;
+}
+
+export namespace FactoriesCursorPageResponse {
+  export interface PageInfo {
+    has_next_page?: boolean;
+
+    next_cursor?: string;
+  }
+}
+
+export interface FactoriesCursorPageParams {
+  cursor?: string;
+
+  limit?: number;
+}
+
+export class FactoriesCursorPage<Item>
+  extends AbstractPage<Item>
+  implements FactoriesCursorPageResponse<Item>
+{
+  factories: Array<Item>;
+
+  page_info: FactoriesCursorPageResponse.PageInfo;
+
+  constructor(
+    client: OzAPI,
+    response: Response,
+    body: FactoriesCursorPageResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
+    super(client, response, body, options);
+
+    this.factories = body.factories || [];
+    this.page_info = body.page_info || {};
+  }
+
+  getPaginatedItems(): Item[] {
+    return this.factories ?? [];
+  }
+
+  override hasNextPage(): boolean {
+    if (this.page_info?.has_next_page === false) {
+      return false;
+    }
+
+    return super.hasNextPage();
+  }
+
+  nextPageRequestOptions(): PageRequestOptions | null {
+    const cursor = this.page_info?.next_cursor;
+    if (!cursor) {
+      return null;
+    }
+
+    return {
+      ...this.options,
+      query: {
+        ...maybeObj(this.options.query),
+        cursor,
+      },
+    };
+  }
+}

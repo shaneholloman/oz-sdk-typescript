@@ -21,3 +21,9 @@ export {
   type AgentListEnvironmentsParams,
   type AgentRunParams,
 } from './agent/agent';
+export {
+  Factories,
+  type Factory,
+  type FactoryListParams,
+  type FactoriesFactoriesCursorPage,
+} from './factories/factories';

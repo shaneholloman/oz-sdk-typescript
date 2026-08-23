@@ -15,7 +15,13 @@ import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { AbstractPage, type RunsCursorPageParams, RunsCursorPageResponse } from './core/pagination';
+import {
+  AbstractPage,
+  type FactoriesCursorPageParams,
+  FactoriesCursorPageResponse,
+  type RunsCursorPageParams,
+  RunsCursorPageResponse,
+} from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -40,6 +46,12 @@ import {
   Scope,
   UserProfile,
 } from './resources/agent/agent';
+import {
+  Factories,
+  FactoriesFactoriesCursorPage,
+  Factory,
+  FactoryListParams,
+} from './resources/factories/factories';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -793,9 +805,14 @@ export class OzAPI {
    * Operations for running and managing cloud agents
    */
   agent: API.Agent = new API.Agent(this);
+  /**
+   * Operations for creating and managing factories
+   */
+  factories: API.Factories = new API.Factories(this);
 }
 
 OzAPI.Agent = Agent;
+OzAPI.Factories = Factories;
 
 export declare namespace OzAPI {
   export type RequestOptions = Opts.RequestOptions;
@@ -804,6 +821,12 @@ export declare namespace OzAPI {
   export {
     type RunsCursorPageParams as RunsCursorPageParams,
     type RunsCursorPageResponse as RunsCursorPageResponse,
+  };
+
+  export import FactoriesCursorPage = Pagination.FactoriesCursorPage;
+  export {
+    type FactoriesCursorPageParams as FactoriesCursorPageParams,
+    type FactoriesCursorPageResponse as FactoriesCursorPageResponse,
   };
 
   export {
@@ -826,5 +849,12 @@ export declare namespace OzAPI {
     type AgentListParams as AgentListParams,
     type AgentListEnvironmentsParams as AgentListEnvironmentsParams,
     type AgentRunParams as AgentRunParams,
+  };
+
+  export {
+    Factories as Factories,
+    type Factory as Factory,
+    type FactoriesFactoriesCursorPage as FactoriesFactoriesCursorPage,
+    type FactoryListParams as FactoryListParams,
   };
 }
