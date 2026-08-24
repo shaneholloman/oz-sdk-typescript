@@ -71,13 +71,10 @@ export class Agent extends APIResource {
   }
 
   /**
-   * Retrieve an artifact by its UUID. For downloadable file-like artifacts, returns
-   * a time-limited signed download URL. For plan artifacts, returns the current plan
-   * content inline.
-   *
-   * Public artifacts can be read without authentication; private artifacts require
-   * the caller to be authenticated and authorized. Anonymous reads of public file
-   * artifacts omit the `filepath` field.
+   * Retrieve an artifact by its UUID: a time-limited signed download URL for
+   * downloadable file-like artifacts, or the current plan content inline for plan
+   * artifacts. Public artifacts can be read without authentication; private
+   * artifacts require the caller to be authenticated and authorized.
    *
    * @example
    * ```ts
@@ -226,8 +223,8 @@ export interface AmbientAgentConfig {
   computer_use_enabled?: boolean;
 
   /**
-   * Model the computer use subagent runs on. If not set, the subagent picks its own
-   * model automatically. Only applies to the built-in Oz harness; the value is
+   * Model the computer use subagent runs on; if omitted, the subagent picks its own
+   * model automatically. Only applies to the built-in Warp harness — the value is
    * accepted but has no effect under a third-party harness or when computer use is
    * disabled. Requires an agent CLI version that supports the --computer-use-model
    * flag.
@@ -239,14 +236,11 @@ export interface AmbientAgentConfig {
    * (e.g. GitHub or GitLab OAuth tokens) on behalf of this run.
    *
    * - EXECUTOR (default when unset): credentials are sourced from the run's
-   *   execution principal. For agent principals this produces a GitHub App
-   *   installation token; for user principals this produces their personal OAuth
-   *   token.
-   * - CREATOR: credentials are always sourced from the run creator, regardless of
-   *   the execution principal. Useful when a service account executes the run but
-   *   Git operations should authenticate as the human who triggered it. When unset,
-   *   behavior is identical to EXECUTOR and no additional pre-flight validation is
-   *   performed.
+   *   execution principal — a GitHub App installation token for agent principals, a
+   *   personal OAuth token for user principals.
+   * - CREATOR: credentials are always sourced from the run creator regardless of the
+   *   execution principal, useful when a service account executes the run but Git
+   *   operations should authenticate as the triggering human.
    */
   credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
@@ -259,8 +253,9 @@ export interface AmbientAgentConfig {
    * Specifies which execution harness to use for the agent run. Default (nil/empty)
    * uses Warp's built-in harness. When stored as a named agent's default
    * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
-   * to be empty, since the two describe mutually exclusive default models.
+   * base_harness/base_model pair: a harness other than `oz` here requires the
+   * agent's base_model to be empty, since the two describe mutually exclusive
+   * default models.
    */
   harness?: AmbientAgentConfig.Harness;
 
@@ -314,22 +309,22 @@ export interface AmbientAgentConfig {
   runner_id?: string;
 
   /**
-   * Configures sharing behavior for the run's shared session. When set, the worker
+   * Configures sharing behavior for the run's shared session; when set, the worker
    * emits `--share public:<level>` and the bundled Warp client applies an
    * anyone-with-link ACL to the shared session once it has bootstrapped. The same
-   * ACL is mirrored onto the backing conversation so link viewers can read the
-   * conversation without being on the run's team. Subject to the workspace-level
-   * anyone-with-link sharing setting.
+   * ACL is mirrored onto the backing conversation so link viewers can read it
+   * without being on the run's team, subject to the workspace-level anyone-with-link
+   * sharing setting.
    */
   session_sharing?: AmbientAgentConfig.SessionSharing;
 
   /**
-   * Skill specification identifying the primary agent skill to use. Format:
-   * "{owner}/{repo}:{skill_path}" Example:
-   * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md" Mutually exclusive with
-   * skills in create/update requests. Responses include the first skills entry here
-   * for backward compatibility. Use the list agents endpoint to discover available
-   * skills.
+   * Skill specification identifying the primary agent skill to use, in
+   * `{owner}/{repo}:{skill_path}` format (e.g.
+   * `warpdotdev/warp-server:.claude/skills/deploy/SKILL.md`); mutually exclusive
+   * with `skills` in create/update requests. Responses include the first `skills`
+   * entry here for backward compatibility; use the list agents endpoint to discover
+   * available skills.
    */
   skill_spec?: string;
 
@@ -353,22 +348,23 @@ export namespace AmbientAgentConfig {
    * Specifies which execution harness to use for the agent run. Default (nil/empty)
    * uses Warp's built-in harness. When stored as a named agent's default
    * (create/update agent identity), this field replaces the deprecated
-   * base_harness/base_model pair: a non-oz type here requires the agent's base_model
-   * to be empty, since the two describe mutually exclusive default models.
+   * base_harness/base_model pair: a harness other than `oz` here requires the
+   * agent's base_model to be empty, since the two describe mutually exclusive
+   * default models.
    */
   export interface Harness {
     /**
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-     * when type is a non-oz harness; the top-level config model_id targets the
-     * built-in Warp harness instead. When omitted or empty, the harness uses its own
-     * default model.
+     * when type is a harness other than `oz`; the top-level config model_id targets
+     * the built-in Warp harness instead. When omitted or empty, the harness uses its
+     * own default model.
      */
     model_id?: string;
 
     /**
      * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-     * type is a non-oz harness. Ignored by harnesses that do not support reasoning
-     * levels.
+     * type is a harness other than `oz`. Ignored by harnesses that do not support
+     * reasoning levels.
      */
     reasoning_level?: string;
 
@@ -456,22 +452,21 @@ export namespace AmbientAgentConfig {
   }
 
   /**
-   * Configures sharing behavior for the run's shared session. When set, the worker
+   * Configures sharing behavior for the run's shared session; when set, the worker
    * emits `--share public:<level>` and the bundled Warp client applies an
    * anyone-with-link ACL to the shared session once it has bootstrapped. The same
-   * ACL is mirrored onto the backing conversation so link viewers can read the
-   * conversation without being on the run's team. Subject to the workspace-level
-   * anyone-with-link sharing setting.
+   * ACL is mirrored onto the backing conversation so link viewers can read it
+   * without being on the run's team, subject to the workspace-level anyone-with-link
+   * sharing setting.
    */
   export interface SessionSharing {
     /**
      * Grants anyone-with-link access at the specified level to the run's shared
-     * session and backing conversation.
+     * session and backing conversation; link viewers must still be authenticated Warp
+     * users (anonymous reads are not supported in this release).
      *
      * - VIEWER: link viewers can read the session and conversation.
-     * - EDITOR: link viewers can also interact with the session. Anonymous
-     *   (unauthenticated) reads are not supported in this release; link viewers must
-     *   still be authenticated Warp users.
+     * - EDITOR: link viewers can also interact with the session.
      */
     public_access?: 'VIEWER' | 'EDITOR';
   }
@@ -594,17 +589,13 @@ export interface CloudEnvironmentConfig {
 
   /**
    * When set (1–60 minutes), a failed run using this environment keeps its session
-   * open for this many minutes so it can be inspected. null or absent means
-   * immediate teardown (disabled by default).
-   *
-   * The window is an idle window held open by the agent process itself: working in
-   * the session pushes the deadline out, so a session in active use is not torn down
-   * mid-debug. It ends early if the run's sandbox reaches its own deadline first.
-   *
-   * This policy applies to future failures of runs using this environment; it does
-   * not change the window a currently-failed run was already started with. Opting in
-   * keeps injected environment data (including secrets) alive and incurs compute
-   * usage for as long as the session is held open.
+   * open for this many minutes so it can be inspected; null or absent means
+   * immediate teardown (disabled by default). This is an idle window held open by
+   * the agent process: activity in the session pushes the deadline out (so an active
+   * session is not torn down mid-debug), and it ends early if the run's sandbox
+   * reaches its own deadline first. Applies only to future failures of runs using
+   * this environment; opting in keeps injected environment data (including secrets)
+   * alive and incurs compute usage for as long as the session is held open.
    */
   failure_session_retention_minutes?: number | null;
 
@@ -659,12 +650,10 @@ export namespace CloudEnvironmentConfig {
 }
 
 /**
- * Error response following RFC 7807 (Problem Details for HTTP APIs). Includes
- * backward-compatible extension members.
- *
- * The response uses the `application/problem+json` content type. Additional
- * extension members (e.g., `auth_url`, `provider`) may be present depending on the
- * error code.
+ * Error response following RFC 7807 (Problem Details for HTTP APIs), using the
+ * `application/problem+json` content type. Includes backward-compatible extension
+ * members; additional ones (e.g., `auth_url`, `provider`) may be present depending
+ * on the error code.
  */
 export interface Error {
   /**
@@ -1189,12 +1178,12 @@ export interface AgentRunParams {
 
   /**
    * Custom key/value metadata attached to a run at creation time and immutable
-   * afterward. At most 20 keys. Keys are 1-64 bytes matching [a-zA-Z0-9._-]+
-   * (case-sensitive); values are 0-256 bytes of UTF-8 and cannot contain NUL
-   * characters. Requests with invalid metadata are rejected. A run's effective
-   * metadata is merged per key at creation: explicit request keys override keys
-   * inherited from the parent run, which override automatic keys (ticket_id and
-   * ticket_source on Linear- and Jira-triggered runs).
+   * afterward; at most 20 keys, with keys 1-64 bytes matching [a-zA-Z0-9._-]+
+   * (case-sensitive) and values 0-256 bytes of UTF-8 with no NUL characters.
+   * Requests with invalid metadata are rejected. A run's effective metadata is
+   * merged per key at creation: explicit request keys override keys inherited from
+   * the parent run, which override automatic keys (ticket_id and ticket_source on
+   * Linear- and Jira-triggered runs).
    */
   metadata?: { [key: string]: string };
 
@@ -1206,19 +1195,19 @@ export interface AgentRunParams {
   mode?: 'normal' | 'plan' | 'orchestrate';
 
   /**
-   * Optional email address or user ID of a Warp user to attribute the run to. When
+   * Optional email address or user ID of a Warp user to attribute the run to; when
    * set, the resolved user becomes the run's creator instead of the caller. Only
-   * agent API keys may use this field, and the calling agent must have on_behalf_of
-   * enabled in its configuration (`on_behalf_of_enabled`), which a team admin must
-   * intentionally turn on per agent. The target user must be an active member of the
-   * run's owner team. Only valid for team-owned runs.
+   * agent API keys may use this field, only when the calling agent has on_behalf_of
+   * enabled in its configuration (a team admin must turn this on per agent), and
+   * only for team-owned runs. The target user must be an active member of the run's
+   * owner team.
    */
   on_behalf_of?: string;
 
   /**
-   * Optional run ID of the parent that spawned this run. Used for orchestration
-   * hierarchies. The parent run must exist and be visible to the caller; otherwise
-   * the request is rejected with a 400. Child runs are also subject to the server's
+   * Optional run ID of the parent that spawned this run, used for orchestration
+   * hierarchies; the parent run must exist and be visible to the caller, or the
+   * request is rejected with a 400. Child runs are also subject to the server's
    * maximum orchestration depth, and requests that would exceed it are rejected with
    * a 400.
    */

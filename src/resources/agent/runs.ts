@@ -44,12 +44,11 @@ export class Runs extends APIResource {
   }
 
   /**
-   * Cancel an agent run that is currently queued or in progress. Once cancelled, the
-   * run will transition to a cancelled state.
-   *
-   * Not all runs can be cancelled. Runs that are in a terminal state (SUCCEEDED,
-   * FAILED, ERROR, BLOCKED, CANCELLED) return 400. Runs in PENDING state return 409
-   * (retry after a moment). Self-hosted, local, and GitHub Action runs return 422.
+   * Cancel an agent run that is currently queued or in progress; once cancelled, the
+   * run transitions to a cancelled state. Not all runs can be cancelled: a run
+   * already in a terminal state, in PENDING, or of an unsupported type (self-hosted,
+   * local, GitHub Action) is rejected instead — see the error responses below for
+   * each case.
    *
    * @example
    * ```ts
@@ -246,7 +245,8 @@ export namespace ArtifactItem {
       filename: string;
 
       /**
-       * Conversation-relative filepath for the uploaded file
+       * Conversation-relative filepath for the uploaded file. Omitted on an anonymous
+       * read of a public file artifact.
        */
       filepath: string;
 
@@ -415,12 +415,12 @@ export interface RunItem {
 
   /**
    * Custom key/value metadata attached to a run at creation time and immutable
-   * afterward. At most 20 keys. Keys are 1-64 bytes matching [a-zA-Z0-9._-]+
-   * (case-sensitive); values are 0-256 bytes of UTF-8 and cannot contain NUL
-   * characters. Requests with invalid metadata are rejected. A run's effective
-   * metadata is merged per key at creation: explicit request keys override keys
-   * inherited from the parent run, which override automatic keys (ticket_id and
-   * ticket_source on Linear- and Jira-triggered runs).
+   * afterward; at most 20 keys, with keys 1-64 bytes matching [a-zA-Z0-9._-]+
+   * (case-sensitive) and values 0-256 bytes of UTF-8 with no NUL characters.
+   * Requests with invalid metadata are rejected. A run's effective metadata is
+   * merged per key at creation: explicit request keys override keys inherited from
+   * the parent run, which override automatic keys (ticket_id and ticket_source on
+   * Linear- and Jira-triggered runs).
    */
   metadata?: { [key: string]: string };
 
@@ -579,8 +579,8 @@ export namespace RunItem {
 
     /**
      * Full-granularity token and dollar-cost breakdown for the run's conversation,
-     * keyed by usage category (e.g. "primary_agent", "conversation_compaction") and
-     * model id. This differs from total_tokens/inference_cost_breakdown_usd which
+     * keyed by usage category (for example, primary_agent or conversation_compaction)
+     * and model id; differs from total_tokens/inference_cost_breakdown_usd, which
      * combine usage across all categories and models. Omitted when the data is not
      * available.
      */
@@ -956,13 +956,12 @@ export namespace RunItem {
     retryable?: boolean;
 
     /**
-     * When a failed run's shared session stops being held open for debugging. Only
-     * present while that window is open.
-     *
-     * The window is an idle window owned by the agent process: activity in the session
-     * pushes this deadline out. The agent republishes it periodically rather than on
-     * every keystroke, so the value can lag the true deadline by up to a throttle
-     * interval, and always in the conservative direction.
+     * When a failed run's shared session stops being held open for debugging; only
+     * present while that window is open. The window is an idle window owned by the
+     * agent process: activity in the session pushes this deadline out. The agent
+     * republishes it periodically rather than on every keystroke, so the value can lag
+     * the true deadline by up to a throttle interval, always in the conservative
+     * direction.
      */
     session_debug_until?: string;
   }
@@ -1138,9 +1137,9 @@ export interface RunListParams extends RunsCursorPageParams {
 
   /**
    * Filter by exact metadata key/value pairs using object notation (e.g.
-   * `metadata[ticket_id]=VIS-238`). Multiple pairs combine with AND semantics. At
-   * most 5 pairs per request. Returns `feature_not_available` when metadata
-   * filtering is not enabled.
+   * `metadata[ticket_id]=VIS-238`), combining multiple pairs with AND semantics, up
+   * to 5 per request. Returns `feature_not_available` when metadata filtering is not
+   * enabled.
    */
   metadata?: { [key: string]: string };
 

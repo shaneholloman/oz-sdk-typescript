@@ -74,15 +74,11 @@ export interface Factory {
 
   /**
    * Default credential strategy for runs executed by the factory's named agents.
-   * Factories default to EXECUTOR.
    *
-   * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
-   *   GitHub App installation token for the factory's team).
+   * - EXECUTOR (default): runs authenticate with the named agent's own credentials
+   *   (e.g. a GitHub App installation token for the factory's team).
    * - CREATOR: runs authenticate with the credentials of the principal that created
-   *   the run. A run-level config.credential_strategy always takes precedence over
-   *   this factory default. The strategy inherited from the factory is validated at
-   *   run creation time (the required credential must be mintable), like an explicit
-   *   run-level value.
+   *   the run.
    */
   credential_strategy: 'CREATOR' | 'EXECUTOR';
 
@@ -177,8 +173,9 @@ export namespace Factory {
      * Specifies which execution harness to use for the agent run. Default (nil/empty)
      * uses Warp's built-in harness. When stored as a named agent's default
      * (create/update agent identity), this field replaces the deprecated
-     * base_harness/base_model pair: a non-oz type here requires the agent's base_model
-     * to be empty, since the two describe mutually exclusive default models.
+     * base_harness/base_model pair: a harness other than `oz` here requires the
+     * agent's base_model to be empty, since the two describe mutually exclusive
+     * default models.
      */
     harness?: AgentDefaults.Harness;
 
@@ -204,22 +201,23 @@ export namespace Factory {
      * Specifies which execution harness to use for the agent run. Default (nil/empty)
      * uses Warp's built-in harness. When stored as a named agent's default
      * (create/update agent identity), this field replaces the deprecated
-     * base_harness/base_model pair: a non-oz type here requires the agent's base_model
-     * to be empty, since the two describe mutually exclusive default models.
+     * base_harness/base_model pair: a harness other than `oz` here requires the
+     * agent's base_model to be empty, since the two describe mutually exclusive
+     * default models.
      */
     export interface Harness {
       /**
        * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
-       * when type is a non-oz harness; the top-level config model_id targets the
-       * built-in Warp harness instead. When omitted or empty, the harness uses its own
-       * default model.
+       * when type is a harness other than `oz`; the top-level config model_id targets
+       * the built-in Warp harness instead. When omitted or empty, the harness uses its
+       * own default model.
        */
       model_id?: string;
 
       /**
        * Reasoning effort for harnesses that support it (e.g. Codex). Only applies when
-       * type is a non-oz harness. Ignored by harnesses that do not support reasoning
-       * levels.
+       * type is a harness other than `oz`. Ignored by harnesses that do not support
+       * reasoning levels.
        */
       reasoning_level?: string;
 

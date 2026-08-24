@@ -10,13 +10,12 @@ import { path } from '../../internal/utils/path';
  */
 export class Sessions extends APIResource {
   /**
-   * Check whether a shared session should redirect to a conversation transcript.
-   * Returns a conversation_id if the agent sandbox has finished and conversation
-   * data is available, or an empty object if no redirect is needed.
-   *
-   * This endpoint is public (no authentication required) so that anonymous viewers
-   * can resolve a publicly-shared session link before signing in. Access to the
-   * underlying conversation transcript is still gated by conversation link-sharing.
+   * Check whether a shared session should redirect to a conversation transcript,
+   * returning a conversation_id if the agent sandbox has finished and conversation
+   * data is available (or an empty object if no redirect is needed). Public and
+   * unauthenticated, so anonymous viewers can resolve a shared session link before
+   * signing in; access to the underlying transcript is still gated by conversation
+   * link-sharing.
    *
    * @example
    * ```ts
