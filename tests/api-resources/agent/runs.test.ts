@@ -62,6 +62,7 @@ describe('resource runs', () => {
           source: 'LINEAR',
           state: ['QUEUED'],
           updated_after: '2019-12-27T18:11:19.117Z',
+          team_uid: 'X-Warp-Team-Uid',
         },
         { path: '/_stainless_unknown_path' },
       ),

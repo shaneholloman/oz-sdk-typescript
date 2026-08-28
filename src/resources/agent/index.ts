@@ -43,6 +43,7 @@ export {
   type ScheduleDeleteResponse,
   type ScheduleCreateParams,
   type ScheduleUpdateParams,
+  type ScheduleListParams,
 } from './schedules';
 export { Sessions, type SessionCheckRedirectResponse } from './sessions';
 export {

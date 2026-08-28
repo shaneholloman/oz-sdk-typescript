@@ -73,6 +73,7 @@ describe('resource agent', () => {
       secrets: [{ name: 'name' }],
       skills: ['string'],
       worker_host: 'worker_host',
+      team_uid: 'X-Warp-Team-Uid',
     });
   });
 
@@ -104,7 +105,10 @@ describe('resource agent', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.agent.agent.list({ factory_uid: 'factory_uid' }, { path: '/_stainless_unknown_path' }),
+      client.agent.agent.list(
+        { factory_uid: 'factory_uid', team_uid: 'X-Warp-Team-Uid' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(OzAPI.NotFoundError);
   });
 

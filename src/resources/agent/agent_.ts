@@ -22,8 +22,16 @@ export class Agent extends APIResource {
    * });
    * ```
    */
-  create(body: AgentCreateParams, options?: RequestOptions): APIPromise<AgentResponse> {
-    return this._client.post('/agent/identities', { body, ...options });
+  create(params: AgentCreateParams, options?: RequestOptions): APIPromise<AgentResponse> {
+    const { team_uid, ...body } = params;
+    return this._client.post('/agent/identities', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -51,10 +59,18 @@ export class Agent extends APIResource {
    * ```
    */
   list(
-    query: AgentListParams | null | undefined = {},
+    params: AgentListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ListAgentIdentitiesResponse> {
-    return this._client.get('/agent/identities', { query, ...options });
+    const { team_uid, ...query } = params ?? {};
+    return this._client.get('/agent/identities', {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -980,13 +996,14 @@ export namespace UpdateAgentRequest {
 
 export interface AgentCreateParams {
   /**
-   * A name for the agent
+   * Body param: A name for the agent
    */
   name: string;
 
   /**
-   * The well-known type of a named agent. The built-in factory agents use FOREMAN,
-   * TRIAGE, SPEC, IMPLEMENT, REVIEW, or VERIFY; every other agent is CUSTOM.
+   * Body param: The well-known type of a named agent. The built-in factory agents
+   * use FOREMAN, TRIAGE, SPEC, IMPLEMENT, REVIEW, or VERIFY; every other agent is
+   * CUSTOM.
    */
   agent_type?: 'FOREMAN' | 'TRIAGE' | 'SPEC' | 'IMPLEMENT' | 'REVIEW' | 'VERIFY' | 'CUSTOM' | null;
 
@@ -996,14 +1013,14 @@ export interface AgentCreateParams {
   base_harness?: string | null;
 
   /**
-   * Optional base model for runs executed by this agent.
+   * Body param: Optional base model for runs executed by this agent.
    */
   base_model?: string | null;
 
   /**
-   * Default credential strategy for runs executed by a named agent; an agent may
-   * leave this unset (see AgentResponse.credential_strategy for the full resolution
-   * order).
+   * Body param: Default credential strategy for runs executed by a named agent; an
+   * agent may leave this unset (see AgentResponse.credential_strategy for the full
+   * resolution order).
    *
    * - EXECUTOR: runs authenticate with the named agent's own credentials (e.g. a
    *   GitHub App installation token for the agent's team).
@@ -1013,33 +1030,33 @@ export interface AgentCreateParams {
   credential_strategy?: 'CREATOR' | 'EXECUTOR' | null;
 
   /**
-   * Optional default runner UID for runs executed by this agent. When set, it
-   * overrides the selected environment's default runner for runs that do not specify
-   * their own `runner_id`. The editor must have View permission on the referenced
-   * runner.
+   * Body param: Optional default runner UID for runs executed by this agent. When
+   * set, it overrides the selected environment's default runner for runs that do not
+   * specify their own `runner_id`. The editor must have View permission on the
+   * referenced runner.
    */
   default_runner_uid?: string | null;
 
   /**
-   * Optional description of the agent
+   * Body param: Optional description of the agent
    */
   description?: string | null;
 
   /**
-   * Optional default cloud environment ID for runs executed by this agent. The
-   * environment must be owned by the same team as the agent.
+   * Body param: Optional default cloud environment ID for runs executed by this
+   * agent. The environment must be owned by the same team as the agent.
    */
   environment_id?: string | null;
 
   /**
-   * Optional UID of the Factory to link this agent to. When omitted, the agent is
-   * not linked to any factory.
+   * Body param: Optional UID of the Factory to link this agent to. When omitted, the
+   * agent is not linked to any factory.
    */
   factory_uid?: string | null;
 
   /**
-   * Specifies which execution harness to use for the agent run. Default (nil/empty)
-   * uses Warp's built-in harness. When stored as a named agent's default
+   * Body param: Specifies which execution harness to use for the agent run. Default
+   * (nil/empty) uses Warp's built-in harness. When stored as a named agent's default
    * (create/update agent identity), this field replaces the deprecated
    * base_harness/base_model pair: a harness other than `oz` here requires the
    * agent's base_model to be empty, since the two describe mutually exclusive
@@ -1048,48 +1065,49 @@ export interface AgentCreateParams {
   harness?: AgentCreateParams.Harness;
 
   /**
-   * Authentication secrets for third-party harnesses. Only the secret for the
-   * harness specified gets injected into the environment.
+   * Body param: Authentication secrets for third-party harnesses. Only the secret
+   * for the harness specified gets injected into the environment.
    */
   harness_auth_secrets?: AgentCreateParams.HarnessAuthSecrets;
 
   /**
-   * Inference provider settings used for LLM calls.
+   * Body param: Inference provider settings used for LLM calls.
    */
   inference_providers?: AgentCreateParams.InferenceProviders;
 
   /**
-   * Optional map of MCP server configurations by name to attach to runs executed by
-   * this agent. Run-level MCP config takes precedence over this agent-level default.
+   * Body param: Optional map of MCP server configurations by name to attach to runs
+   * executed by this agent. Run-level MCP config takes precedence over this
+   * agent-level default.
    */
   mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
 
   /**
-   * Memory settings for creating an agent.
+   * Body param: Memory settings for creating an agent.
    */
   memory?: AgentCreateParams.Memory;
 
   /**
-   * Whether runs created with this agent's API key may use the on_behalf_of field to
-   * attribute runs to another team member. Defaults to false. Only team admins may
-   * set this field.
+   * Body param: Whether runs created with this agent's API key may use the
+   * on_behalf_of field to attribute runs to another team member. Defaults to false.
+   * Only team admins may set this field.
    */
   on_behalf_of_enabled?: boolean;
 
   /**
-   * Optional base prompt for this agent
+   * Body param: Optional base prompt for this agent
    */
   prompt?: string | null;
 
   /**
-   * Optional list of secrets associated with the agent. Duplicate names within a
-   * single request are rejected. Each entry is unioned into the run-time secret
-   * scope when the agent executes.
+   * Body param: Optional list of secrets associated with the agent. Duplicate names
+   * within a single request are rejected. Each entry is unioned into the run-time
+   * secret scope when the agent executes.
    */
   secrets?: Array<AgentCreateParams.Secret>;
 
   /**
-   * Optional list of skill specs to associate with the agent. Format:
+   * Body param: Optional list of skill specs to associate with the agent. Format:
    * "{owner}/{repo}:{skill_path}" (e.g.,
    * "warpdotdev/warp-server:.claude/skills/deploy/SKILL.md"). Each spec is validated
    * and normalized at attach time using the team's GitHub credentials; inaccessible
@@ -1098,17 +1116,23 @@ export interface AgentCreateParams {
   skills?: Array<string>;
 
   /**
-   * Optional default worker host for runs executed by this agent; omission, null, or
-   * an empty value stores no Agent default, in which case the workspace default
-   * applies. A non-empty value is trimmed and stored (use "warp" to force
-   * Warp-hosted execution over a self-hosted workspace default), and is resolved in
-   * this order:
+   * Body param: Optional default worker host for runs executed by this agent;
+   * omission, null, or an empty value stores no Agent default, in which case the
+   * workspace default applies. A non-empty value is trimmed and stored (use "warp"
+   * to force Warp-hosted execution over a self-hosted workspace default), and is
+   * resolved in this order:
    *
    * 1. The host specified on the run itself
    * 2. The agent's default host
    * 3. The workspace default host
    */
   worker_host?: string | null;
+
+  /**
+   * Header param: UID of the team to use as the request's active team. Ignored for
+   * service-account callers, which always act as their bound team.
+   */
+  team_uid?: string;
 }
 
 export namespace AgentCreateParams {
@@ -1514,11 +1538,17 @@ export namespace AgentUpdateParams {
 
 export interface AgentListParams {
   /**
-   * Optional UID of a Factory to filter by. When provided, only agents linked to
-   * that factory (and owned by the caller's team) are returned. Ignored unless the
-   * factory API is enabled.
+   * Query param: Optional UID of a Factory to filter by. When provided, only agents
+   * linked to that factory (and owned by the caller's team) are returned. Ignored
+   * unless the factory API is enabled.
    */
   factory_uid?: string;
+
+  /**
+   * Header param: UID of the team to use as the request's active team. Ignored for
+   * service-account callers, which always act as their bound team.
+   */
+  team_uid?: string;
 }
 
 export declare namespace Agent {

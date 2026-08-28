@@ -32,6 +32,7 @@ import * as SchedulesAPI from './schedules';
 import {
   ScheduleCreateParams,
   ScheduleDeleteResponse,
+  ScheduleListParams,
   ScheduleListResponse,
   ScheduleUpdateParams,
   ScheduledAgentHistoryItem,
@@ -41,6 +42,7 @@ import {
 import * as SessionsAPI from './sessions';
 import { SessionCheckRedirectResponse, Sessions } from './sessions';
 import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -64,10 +66,18 @@ export class Agent extends APIResource {
    * ```
    */
   list(
-    query: AgentListParams | null | undefined = {},
+    params: AgentListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AgentListResponse> {
-    return this._client.get('/agent', { query, ...options });
+    const { team_uid, ...query } = params ?? {};
+    return this._client.get('/agent', {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -98,10 +108,18 @@ export class Agent extends APIResource {
    * ```
    */
   listEnvironments(
-    query: AgentListEnvironmentsParams | null | undefined = {},
+    params: AgentListEnvironmentsParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AgentListEnvironmentsResponse> {
-    return this._client.get('/agent/environments', { query, ...options });
+    const { team_uid, ...query } = params ?? {};
+    return this._client.get('/agent/environments', {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -113,8 +131,16 @@ export class Agent extends APIResource {
    * const response = await client.agent.run();
    * ```
    */
-  run(body: AgentRunParams, options?: RequestOptions): APIPromise<AgentRunResponse> {
-    return this._client.post('/agent/runs', { body, ...options });
+  run(params: AgentRunParams, options?: RequestOptions): APIPromise<AgentRunResponse> {
+    const { team_uid, ...body } = params;
+    return this._client.post('/agent/runs', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -1110,118 +1136,132 @@ export interface AgentRunResponse {
 
 export interface AgentListParams {
   /**
-   * When true, includes skills whose SKILL.md file exists but is malformed. These
-   * variants will have a non-empty `error` field describing the parse failure.
-   * Defaults to false.
+   * Query param: When true, includes skills whose SKILL.md file exists but is
+   * malformed. These variants will have a non-empty `error` field describing the
+   * parse failure. Defaults to false.
    */
   include_malformed_skills?: boolean;
 
   /**
-   * When true, clears the agent list cache before fetching. Use this to force a
-   * refresh of the available agents.
+   * Query param: When true, clears the agent list cache before fetching. Use this to
+   * force a refresh of the available agents.
    */
   refresh?: boolean;
 
   /**
-   * Optional repository specification to list agents from (format: "owner/repo"). If
-   * not provided, lists agents from all accessible environments.
+   * Query param: Optional repository specification to list agents from (format:
+   * "owner/repo"). If not provided, lists agents from all accessible environments.
    */
   repo?: string;
 
   /**
-   * Sort order for the returned agents.
+   * Query param: Sort order for the returned agents.
    *
    * - "name": Sort alphabetically by name (default)
    * - "last_run": Sort by most recently used
    */
   sort_by?: 'name' | 'last_run';
+
+  /**
+   * Header param: UID of the team to use as the request's active team. Ignored for
+   * service-account callers, which always act as their bound team.
+   */
+  team_uid?: string;
 }
 
 export interface AgentListEnvironmentsParams {
   /**
-   * Sort order for the returned environments.
+   * Query param: Sort order for the returned environments.
    *
    * - `name`: alphabetical by environment name
    * - `last_updated`: most recently updated first (default)
    */
   sort_by?: 'name' | 'last_updated';
+
+  /**
+   * Header param: UID of the team to use as the request's active team. Ignored for
+   * service-account callers, which always act as their bound team.
+   */
+  team_uid?: string;
 }
 
 export interface AgentRunParams {
   /**
-   * Optional agent identity UID to use as the execution principal for the run. This
-   * is only valid for runs that are team owned.
+   * Body param: Optional agent identity UID to use as the execution principal for
+   * the run. This is only valid for runs that are team owned.
    */
   agent_identity_uid?: string;
 
   /**
-   * Optional file attachments to include with the prompt (max 5). Attachments are
-   * uploaded to cloud storage and made available to the agent.
+   * Body param: Optional file attachments to include with the prompt (max 5).
+   * Attachments are uploaded to cloud storage and made available to the agent.
    */
   attachments?: Array<AgentRunParams.Attachment>;
 
   /**
-   * Configuration for a cloud agent run
+   * Body param: Configuration for a cloud agent run
    */
   config?: AmbientAgentConfig;
 
   /**
-   * Optional conversation ID to continue an existing conversation. If provided, the
-   * agent will continue from where the previous run left off.
+   * Body param: Optional conversation ID to continue an existing conversation. If
+   * provided, the agent will continue from where the previous run left off.
    */
   conversation_id?: string;
 
   /**
-   * Whether the run should be interactive. If not set, defaults to false.
+   * Body param: Whether the run should be interactive. If not set, defaults to
+   * false.
    */
   interactive?: boolean;
 
   /**
-   * Custom key/value metadata attached to a run at creation time and immutable
-   * afterward; at most 20 keys, with keys 1-64 bytes matching [a-zA-Z0-9._-]+
-   * (case-sensitive) and values 0-256 bytes of UTF-8 with no NUL characters.
-   * Requests with invalid metadata are rejected. A run's effective metadata is
-   * merged per key at creation: explicit request keys override keys inherited from
-   * the parent run, which override automatic keys (ticket_id and ticket_source on
-   * Linear- and Jira-triggered runs).
+   * Body param: Custom key/value metadata attached to a run at creation time and
+   * immutable afterward; at most 20 keys, with keys 1-64 bytes matching
+   * [a-zA-Z0-9._-]+ (case-sensitive) and values 0-256 bytes of UTF-8 with no NUL
+   * characters. Requests with invalid metadata are rejected. A run's effective
+   * metadata is merged per key at creation: explicit request keys override keys
+   * inherited from the parent run, which override automatic keys (ticket_id and
+   * ticket_source on Linear- and Jira-triggered runs).
    */
   metadata?: { [key: string]: string };
 
   /**
-   * Optional query mode for the run. Defaults to `normal` when omitted. The server
-   * does not infer mode from prompt prefixes such as `/plan`, so callers should pass
-   * this field explicitly to request non-normal behavior.
+   * Body param: Optional query mode for the run. Defaults to `normal` when omitted.
+   * The server does not infer mode from prompt prefixes such as `/plan`, so callers
+   * should pass this field explicitly to request non-normal behavior.
    */
   mode?: 'normal' | 'plan' | 'orchestrate';
 
   /**
-   * Optional email address or user ID of a Warp user to attribute the run to; when
-   * set, the resolved user becomes the run's creator instead of the caller. Only
-   * agent API keys may use this field, only when the calling agent has on_behalf_of
-   * enabled in its configuration (a team admin must turn this on per agent), and
-   * only for team-owned runs. The target user must be an active member of the run's
-   * owner team.
+   * Body param: Optional email address or user ID of a Warp user to attribute the
+   * run to; when set, the resolved user becomes the run's creator instead of the
+   * caller. Only agent API keys may use this field, only when the calling agent has
+   * on_behalf_of enabled in its configuration (a team admin must turn this on per
+   * agent), and only for team-owned runs. The target user must be an active member
+   * of the run's owner team.
    */
   on_behalf_of?: string;
 
   /**
-   * Optional run ID of the parent that spawned this run, used for orchestration
-   * hierarchies; the parent run must exist and be visible to the caller, or the
-   * request is rejected with a 400. Child runs are also subject to the server's
-   * maximum orchestration depth, and requests that would exceed it are rejected with
-   * a 400.
+   * Body param: Optional run ID of the parent that spawned this run, used for
+   * orchestration hierarchies; the parent run must exist and be visible to the
+   * caller, or the request is rejected with a 400. Child runs are also subject to
+   * the server's maximum orchestration depth, and requests that would exceed it are
+   * rejected with a 400.
    */
   parent_run_id?: string;
 
   /**
-   * The prompt/instruction for the agent to execute. Required unless a skill is
-   * specified via the skill field, config.skill_spec, or config.skills. Handoff
-   * requests may omit prompt when conversation_id is set.
+   * Body param: The prompt/instruction for the agent to execute. Required unless a
+   * skill is specified via the skill field, config.skill_spec, or config.skills.
+   * Handoff requests may omit prompt when conversation_id is set.
    */
   prompt?: string;
 
   /**
-   * Skill specification to use as the base prompt for the agent. Supported formats:
+   * Body param: Skill specification to use as the base prompt for the agent.
+   * Supported formats:
    *
    * - "repo:skill_name" - Simple name in specific repo
    * - "repo:skill_path" - Full path in specific repo
@@ -1232,14 +1272,21 @@ export interface AgentRunParams {
   skill?: string;
 
   /**
-   * Whether to create a team-owned run. Defaults to true for users on a single team.
+   * Body param: Whether to create a team-owned run. Defaults to true for users on a
+   * single team.
    */
   team?: boolean;
 
   /**
-   * Custom title for the run (auto-generated if not provided)
+   * Body param: Custom title for the run (auto-generated if not provided)
    */
   title?: string;
+
+  /**
+   * Header param: UID of the team to use as the request's active team. Ignored for
+   * service-account callers, which always act as their bound team.
+   */
+  team_uid?: string;
 }
 
 export namespace AgentRunParams {
@@ -1315,6 +1362,7 @@ export declare namespace Agent {
     type ScheduleDeleteResponse as ScheduleDeleteResponse,
     type ScheduleCreateParams as ScheduleCreateParams,
     type ScheduleUpdateParams as ScheduleUpdateParams,
+    type ScheduleListParams as ScheduleListParams,
   };
 
   export {

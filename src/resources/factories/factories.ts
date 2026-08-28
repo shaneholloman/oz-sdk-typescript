@@ -6,6 +6,7 @@ import * as RunsAPI from './runs';
 import { RunCreateParams, RunCreateResponse, Runs } from './runs';
 import { APIPromise } from '../../core/api-promise';
 import { FactoriesCursorPage, type FactoriesCursorPageParams, PagePromise } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -16,16 +17,25 @@ export class Factories extends APIResource {
   runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
 
   /**
-   * List factories accessible to the authenticated principal. An optional team_uid
-   * query parameter restricts results to a single team, and an optional search query
-   * parameter filters by a case-insensitive substring match on the factory name or
-   * alias.
+   * List factories accessible to the authenticated principal, restricted to the
+   * request's active team when one is set. An optional team_uid query parameter
+   * overrides the active team and restricts results to a single team, and an
+   * optional search query parameter filters by a case-insensitive substring match on
+   * the factory name or alias.
    */
   list(
-    query: FactoryListParams | null | undefined = {},
+    params: FactoryListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<FactoriesFactoriesCursorPage, Factory> {
-    return this._client.getAPIList('/factory', FactoriesCursorPage<Factory>, { query, ...options });
+    const { team_uid, ...query } = params ?? {};
+    return this._client.getAPIList('/factory', FactoriesCursorPage<Factory>, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -306,12 +316,19 @@ export namespace Factory {
 
 export interface FactoryListParams extends FactoriesCursorPageParams {
   /**
-   * Case-insensitive substring search over the factory name and alias.
+   * Query param: Case-insensitive substring search over the factory name and alias.
    */
   search?: string;
 
   /**
-   * Optional team UID to filter factories by ownership.
+   * Query param: Optional team UID to filter factories by ownership. Takes
+   * precedence over the X-Warp-Team-Uid header.
+   */
+  query_team_uid?: string;
+
+  /**
+   * Header param: UID of the team to use as the request's active team. Ignored for
+   * service-account callers, which always act as their bound team.
    */
   team_uid?: string;
 }

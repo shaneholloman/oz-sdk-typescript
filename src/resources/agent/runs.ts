@@ -4,6 +4,7 @@ import { APIResource } from '../../core/resource';
 import * as AgentAPI from './agent';
 import { APIPromise } from '../../core/api-promise';
 import { PagePromise, RunsCursorPage, type RunsCursorPageParams } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -37,10 +38,18 @@ export class Runs extends APIResource {
    * ```
    */
   list(
-    query: RunListParams | null | undefined = {},
+    params: RunListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<RunItemsRunsCursorPage, RunItem> {
-    return this._client.getAPIList('/agent/runs', RunsCursorPage<RunItem>, { query, ...options });
+    const { team_uid, ...query } = params ?? {};
+    return this._client.getAPIList('/agent/runs', RunsCursorPage<RunItem>, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -1077,105 +1086,106 @@ export type RunSubmitFollowupResponse = unknown;
 
 export interface RunListParams extends RunsCursorPageParams {
   /**
-   * Filter runs by ancestor run ID. The referenced run must exist and be accessible
-   * to the caller.
+   * Query param: Filter runs by ancestor run ID. The referenced run must exist and
+   * be accessible to the caller.
    */
   ancestor_run_id?: string;
 
   /**
-   * Filter runs by artifact type
+   * Query param: Filter runs by artifact type
    */
   artifact_type?: 'PLAN' | 'PULL_REQUEST' | 'SCREENSHOT' | 'FILE' | 'EXTERNAL_REFERENCE';
 
   /**
-   * Filter runs by the factory automation that dispatched them. Matches runs stamped
-   * with the automation_id metadata key at creation time.
+   * Query param: Filter runs by the factory automation that dispatched them. Matches
+   * runs stamped with the automation_id metadata key at creation time.
    */
   automation_id?: string;
 
   /**
-   * Filter runs created after this timestamp (RFC3339 format)
+   * Query param: Filter runs created after this timestamp (RFC3339 format)
    */
   created_after?: string;
 
   /**
-   * Filter runs created before this timestamp (RFC3339 format)
+   * Query param: Filter runs created before this timestamp (RFC3339 format)
    */
   created_before?: string;
 
   /**
-   * Filter by creator UID (user or service account)
+   * Query param: Filter by creator UID (user or service account)
    */
   creator?: string;
 
   /**
-   * Filter runs by environment ID. Passing the literal value `empty-environment`
-   * matches runs with no environment configured, rather than omitting the parameter,
-   * which applies no environment filter at all. `empty-environment` can never
-   * collide with a real environment ID: every environment ID is exactly 22
-   * characters drawn from `[A-Za-z0-9]`, while this sentinel contains a hyphen and
-   * is a different length.
+   * Query param: Filter runs by environment ID. Passing the literal value
+   * `empty-environment` matches runs with no environment configured, rather than
+   * omitting the parameter, which applies no environment filter at all.
+   * `empty-environment` can never collide with a real environment ID: every
+   * environment ID is exactly 22 characters drawn from `[A-Za-z0-9]`, while this
+   * sentinel contains a hyphen and is a different length.
    */
   environment_id?: string;
 
   /**
-   * Filter by where the run executed
+   * Query param: Filter by where the run executed
    */
   execution_location?: 'LOCAL' | 'REMOTE';
 
   /**
-   * Filter by the user or agent that executed the run. This will often be the same
-   * as the creator, but not always: users may delegate tasks to agents.
+   * Query param: Filter by the user or agent that executed the run. This will often
+   * be the same as the creator, but not always: users may delegate tasks to agents.
    */
   executor?: string;
 
   /**
-   * Filter runs by factory. Matches runs executed by any of the factory's agents. A
-   * UID outside the caller's accessible factories matches nothing.
+   * Query param: Filter runs by factory. Matches runs executed by any of the
+   * factory's agents. A UID outside the caller's accessible factories matches
+   * nothing.
    */
   factory_uid?: string;
 
   /**
-   * Filter by exact metadata key/value pairs using object notation (e.g.
-   * `metadata[ticket_id]=VIS-238`), combining multiple pairs with AND semantics, up
-   * to 5 per request. Returns `feature_not_available` when metadata filtering is not
-   * enabled.
+   * Query param: Filter by exact metadata key/value pairs using object notation
+   * (e.g. `metadata[ticket_id]=VIS-238`), combining multiple pairs with AND
+   * semantics, up to 5 per request. Returns `feature_not_available` when metadata
+   * filtering is not enabled.
    */
   metadata?: { [key: string]: string };
 
   /**
-   * Filter by model ID
+   * Query param: Filter by model ID
    */
   model_id?: string;
 
   /**
-   * Filter by agent config name
+   * Query param: Filter by agent config name
    */
   name?: string;
 
   /**
-   * Fuzzy search query across run title, prompt, and skill_spec
+   * Query param: Fuzzy search query across run title, prompt, and skill_spec
    */
   q?: string;
 
   /**
-   * Filter runs by the scheduled agent ID that created them
+   * Query param: Filter runs by the scheduled agent ID that created them
    */
   schedule_id?: string;
 
   /**
-   * Filter runs by skill spec (e.g., "owner/repo:path/to/SKILL.md"). Alias for
-   * skill_spec.
+   * Query param: Filter runs by skill spec (e.g., "owner/repo:path/to/SKILL.md").
+   * Alias for skill_spec.
    */
   skill?: string;
 
   /**
-   * Filter runs by skill spec (e.g., "owner/repo:path/to/SKILL.md")
+   * Query param: Filter runs by skill spec (e.g., "owner/repo:path/to/SKILL.md")
    */
   skill_spec?: string;
 
   /**
-   * Sort field for results.
+   * Query param: Sort field for results.
    *
    * - `updated_at`: Sort by last update timestamp (default)
    * - `created_at`: Sort by creation timestamp
@@ -1185,25 +1195,31 @@ export interface RunListParams extends RunsCursorPageParams {
   sort_by?: 'updated_at' | 'created_at' | 'title' | 'agent';
 
   /**
-   * Sort direction
+   * Query param: Sort direction
    */
   sort_order?: 'asc' | 'desc';
 
   /**
-   * Filter by run source type
+   * Query param: Filter by run source type
    */
   source?: RunSourceType;
 
   /**
-   * Filter by run state. Can be specified multiple times to match any of the given
-   * states.
+   * Query param: Filter by run state. Can be specified multiple times to match any
+   * of the given states.
    */
   state?: Array<RunState>;
 
   /**
-   * Filter runs updated after this timestamp (RFC3339 format)
+   * Query param: Filter runs updated after this timestamp (RFC3339 format)
    */
   updated_after?: string;
+
+  /**
+   * Header param: UID of the team to use as the request's active team. Ignored for
+   * service-account callers, which always act as their bound team.
+   */
+  team_uid?: string;
 }
 
 export interface RunSubmitFollowupParams {

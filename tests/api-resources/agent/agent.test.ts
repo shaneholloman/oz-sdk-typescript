@@ -30,6 +30,7 @@ describe('resource agent', () => {
           refresh: true,
           repo: 'repo',
           sort_by: 'name',
+          team_uid: 'X-Warp-Team-Uid',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -64,7 +65,10 @@ describe('resource agent', () => {
   test.skip('listEnvironments: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.agent.listEnvironments({ sort_by: 'name' }, { path: '/_stainless_unknown_path' }),
+      client.agent.listEnvironments(
+        { sort_by: 'name', team_uid: 'X-Warp-Team-Uid' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(OzAPI.NotFoundError);
   });
 

@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as AgentAPI from './agent';
 import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -26,8 +27,16 @@ export class Schedules extends APIResource {
    *   });
    * ```
    */
-  create(body: ScheduleCreateParams, options?: RequestOptions): APIPromise<ScheduledAgentItem> {
-    return this._client.post('/agent/schedules', { body, ...options });
+  create(params: ScheduleCreateParams, options?: RequestOptions): APIPromise<ScheduledAgentItem> {
+    const { team_uid, ...body } = params;
+    return this._client.post('/agent/schedules', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -75,8 +84,18 @@ export class Schedules extends APIResource {
    * const schedules = await client.agent.schedules.list();
    * ```
    */
-  list(options?: RequestOptions): APIPromise<ScheduleListResponse> {
-    return this._client.get('/agent/schedules', options);
+  list(
+    params: ScheduleListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ScheduleListResponse> {
+    const { team_uid } = params ?? {};
+    return this._client.get('/agent/schedules', {
+      ...options,
+      headers: buildHeaders([
+        { ...(team_uid != null ? { 'X-Warp-Team-Uid': team_uid } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -235,60 +254,67 @@ export interface ScheduleDeleteResponse {
 
 export interface ScheduleCreateParams {
   /**
-   * Cron expression defining when the agent runs (e.g., "0 9 \* \* \*" for daily at
-   * 9am UTC)
+   * Body param: Cron expression defining when the agent runs (e.g., "0 9 \* \* \*"
+   * for daily at 9am UTC)
    */
   cron_schedule: string;
 
   /**
-   * Human-readable name for the schedule
+   * Body param: Human-readable name for the schedule
    */
   name: string;
 
   /**
-   * Configuration for a cloud agent run
+   * Body param: Configuration for a cloud agent run
    */
   agent_config?: AgentAPI.AmbientAgentConfig;
 
   /**
-   * Agent UID to use as the execution principal for this schedule. Only valid for
-   * team-owned schedules.
+   * Body param: Agent UID to use as the execution principal for this schedule. Only
+   * valid for team-owned schedules.
    */
   agent_uid?: string;
 
   /**
-   * Whether the schedule should be active immediately
+   * Body param: Whether the schedule should be active immediately
    */
   enabled?: boolean;
 
   /**
-   * Custom key/value metadata attached to a run at creation time and immutable
-   * afterward; at most 20 keys, with keys 1-64 bytes matching [a-zA-Z0-9._-]+
-   * (case-sensitive) and values 0-256 bytes of UTF-8 with no NUL characters.
-   * Requests with invalid metadata are rejected. A run's effective metadata is
-   * merged per key at creation: explicit request keys override keys inherited from
-   * the parent run, which override automatic keys (ticket_id and ticket_source on
-   * Linear- and Jira-triggered runs).
+   * Body param: Custom key/value metadata attached to a run at creation time and
+   * immutable afterward; at most 20 keys, with keys 1-64 bytes matching
+   * [a-zA-Z0-9._-]+ (case-sensitive) and values 0-256 bytes of UTF-8 with no NUL
+   * characters. Requests with invalid metadata are rejected. A run's effective
+   * metadata is merged per key at creation: explicit request keys override keys
+   * inherited from the parent run, which override automatic keys (ticket_id and
+   * ticket_source on Linear- and Jira-triggered runs).
    */
   metadata?: { [key: string]: string };
 
   /**
-   * Optional query mode applied to every triggered run. Defaults to `normal` when
-   * omitted. The server does not infer mode from prompt prefixes such as `/plan`.
+   * Body param: Optional query mode applied to every triggered run. Defaults to
+   * `normal` when omitted. The server does not infer mode from prompt prefixes such
+   * as `/plan`.
    */
   mode?: 'normal' | 'plan' | 'orchestrate';
 
   /**
-   * The prompt/instruction for the agent to execute. Required unless
+   * Body param: The prompt/instruction for the agent to execute. Required unless
    * agent_config.skill_spec or agent_config.skills is provided.
    */
   prompt?: string;
 
   /**
-   * Whether to create a team-owned schedule. Defaults to true for users on a single
-   * team.
+   * Body param: Whether to create a team-owned schedule. Defaults to true for users
+   * on a single team.
    */
   team?: boolean;
+
+  /**
+   * Header param: UID of the team to use as the request's active team. Ignored for
+   * service-account callers, which always act as their bound team.
+   */
+  team_uid?: string;
 }
 
 export interface ScheduleUpdateParams {
@@ -342,6 +368,14 @@ export interface ScheduleUpdateParams {
   prompt?: string;
 }
 
+export interface ScheduleListParams {
+  /**
+   * UID of the team to use as the request's active team. Ignored for service-account
+   * callers, which always act as their bound team.
+   */
+  team_uid?: string;
+}
+
 export declare namespace Schedules {
   export {
     type ScheduledAgentHistoryItem as ScheduledAgentHistoryItem,
@@ -350,5 +384,6 @@ export declare namespace Schedules {
     type ScheduleDeleteResponse as ScheduleDeleteResponse,
     type ScheduleCreateParams as ScheduleCreateParams,
     type ScheduleUpdateParams as ScheduleUpdateParams,
+    type ScheduleListParams as ScheduleListParams,
   };
 }
