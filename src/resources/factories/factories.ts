@@ -272,6 +272,27 @@ export namespace Factory {
      * here; repository access comes from the factory's code forge.
      */
     type: 'jira' | 'linear' | 'slack';
+
+    /**
+     * Persisted Slack settings on a factory integration. Omitted fields keep their
+     * default-off behavior.
+     */
+    slack?: Integration.Slack | null;
+  }
+
+  export namespace Integration {
+    /**
+     * Persisted Slack settings on a factory integration. Omitted fields keep their
+     * default-off behavior.
+     */
+    export interface Slack {
+      /**
+       * When true, eligible plain channel thread replies still reach the reply-intent
+       * classifier. When false or omitted, those replies are ignored unless they
+       * @-mention the Factory. Direct messages are unchanged.
+       */
+      auto_respond_to_thread_replies?: boolean | null;
+    }
   }
 
   /**
