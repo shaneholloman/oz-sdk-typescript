@@ -71,9 +71,10 @@ export interface Factory {
   avatar_url: string | null;
 
   /**
-   * Source-control provider hosting the factory's repositories. NONE declares a
+   * Primary source-control provider for the factory. GITHUB and GITLAB identify the
+   * compatibility primary when repositories span one or more forges. NONE declares a
    * repo-less factory with no native repositories; its environment relies on
-   * setup_commands to clone from any host instead.
+   * setup_commands to clone from any host.
    */
   code_forge: 'GITHUB' | 'GITLAB' | 'NONE';
 
@@ -308,6 +309,11 @@ export namespace Factory {
      * Repository name.
      */
     repo: string;
+
+    /**
+     * The concrete source-control provider hosting a repository.
+     */
+    code_forge?: 'GITHUB' | 'GITLAB';
   }
 
   export interface Scoring {
