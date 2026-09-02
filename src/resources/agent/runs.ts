@@ -508,6 +508,7 @@ export interface RunItem {
    * - RUN_SCORER: Created by Warp's run-scoring judge
    * - ORCHESTRATION: Created as a child run by the orchestration layer
    *   (parent_run_id set)
+   * - BENCHMARK_TRIAL: Created as a factory benchmark trial
    */
   source?: RunSourceType;
 
@@ -1022,6 +1023,7 @@ export namespace RunItem {
  * - RUN_SCORER: Created by Warp's run-scoring judge
  * - ORCHESTRATION: Created as a child run by the orchestration layer
  *   (parent_run_id set)
+ * - BENCHMARK_TRIAL: Created as a factory benchmark trial
  */
 export type RunSourceType =
   | 'LINEAR'
@@ -1039,7 +1041,8 @@ export type RunSourceType =
   | 'GITLAB_WEBHOOK'
   | 'AUTOFIX'
   | 'RUN_SCORER'
-  | 'ORCHESTRATION';
+  | 'ORCHESTRATION'
+  | 'BENCHMARK_TRIAL';
 
 /**
  * Current state of the run:
