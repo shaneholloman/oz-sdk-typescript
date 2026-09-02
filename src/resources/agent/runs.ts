@@ -96,6 +96,16 @@ export class Runs extends APIResource {
    * or ended). A 200 response means the follow-up was accepted; updated run state
    * can be observed via `GET /agent/runs/{runId}`.
    *
+   * A run that failed during environment setup keeps its retained session reachable
+   * for a bounded debug window. A follow-up sent to an eligible run in that window
+   * is delivered into the retained session to start or continue a debug agent,
+   * without reopening the run: it stays in its failed state, with its original
+   * failure message and error code unchanged. This applies uniformly to every
+   * follow-up origin (this endpoint, the Warp client, and integrations) and requires
+   * the same authorization as any other follow-up. Once the debug window closes, or
+   * when the run is not eligible, a follow-up falls back to the run's ordinary
+   * continuation behavior (which may start a new execution).
+   *
    * @example
    * ```ts
    * const response = await client.agent.runs.submitFollowup(
@@ -398,6 +408,14 @@ export interface RunItem {
   conversation_id?: string;
 
   creator?: AgentAPI.UserProfile;
+
+  /**
+   * Whether a debug agent can currently be started inside this run's retained
+   * setup-failure session. Only true for a run that failed during environment setup,
+   * whose retained execution is still reachable, and whose debug window has not
+   * closed. See `POST /agent/runs/{runId}/followups`.
+   */
+  debug_agent_available?: boolean;
 
   /**
    * Where the run executed:
@@ -928,6 +946,13 @@ export namespace RunItem {
     message: string;
 
     /**
+     * Whether a setup-failure debug turn is actively pinning the idle timer open right
+     * now. While true, session_debug_until can lag behind the real deadline; clients
+     * should show an active-debugging state instead of a countdown.
+     */
+    debug_agent_active?: boolean;
+
+    /**
      * Machine-readable error code identifying the problem type. Used in the `type` URI
      * of Error responses and in the `error_code` field of RunStatusMessage.
      *
@@ -965,12 +990,13 @@ export namespace RunItem {
     retryable?: boolean;
 
     /**
-     * When a failed run's shared session stops being held open for debugging; only
-     * present while that window is open. The window is an idle window owned by the
-     * agent process: activity in the session pushes this deadline out. The agent
-     * republishes it periodically rather than on every keystroke, so the value can lag
-     * the true deadline by up to a throttle interval, always in the conservative
-     * direction.
+     * When a failed run's shared session stops being held open for debugging. Only
+     * present while that window is open.
+     *
+     * The window is an idle window owned by the agent process: activity in the session
+     * pushes this deadline out. The agent republishes it periodically rather than on
+     * every keystroke, so the value can lag the true deadline by up to a throttle
+     * interval, and always in the conservative direction.
      */
     session_debug_until?: string;
   }
