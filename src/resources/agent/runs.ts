@@ -511,6 +511,8 @@ export interface RunItem {
    * - BENCHMARK_TRIAL: Created as a factory benchmark trial
    * - CREATE_BENCHMARK_TASK: Created by a Factory foreman authoring a benchmark task
    *   from a completed run
+   * - CUSTOM_WEBHOOK: Created by a factory automation subscribed to a custom webhook
+   *   source
    */
   source?: RunSourceType;
 
@@ -1028,6 +1030,8 @@ export namespace RunItem {
  * - BENCHMARK_TRIAL: Created as a factory benchmark trial
  * - CREATE_BENCHMARK_TASK: Created by a Factory foreman authoring a benchmark task
  *   from a completed run
+ * - CUSTOM_WEBHOOK: Created by a factory automation subscribed to a custom webhook
+ *   source
  */
 export type RunSourceType =
   | 'LINEAR'
@@ -1047,7 +1051,8 @@ export type RunSourceType =
   | 'RUN_SCORER'
   | 'ORCHESTRATION'
   | 'BENCHMARK_TRIAL'
-  | 'CREATE_BENCHMARK_TASK';
+  | 'CREATE_BENCHMARK_TASK'
+  | 'CUSTOM_WEBHOOK';
 
 /**
  * Current state of the run:
