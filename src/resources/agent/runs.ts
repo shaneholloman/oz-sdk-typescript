@@ -509,6 +509,8 @@ export interface RunItem {
    * - ORCHESTRATION: Created as a child run by the orchestration layer
    *   (parent_run_id set)
    * - BENCHMARK_TRIAL: Created as a factory benchmark trial
+   * - CREATE_BENCHMARK_TASK: Created by a Factory foreman authoring a benchmark task
+   *   from a completed run
    */
   source?: RunSourceType;
 
@@ -1024,6 +1026,8 @@ export namespace RunItem {
  * - ORCHESTRATION: Created as a child run by the orchestration layer
  *   (parent_run_id set)
  * - BENCHMARK_TRIAL: Created as a factory benchmark trial
+ * - CREATE_BENCHMARK_TASK: Created by a Factory foreman authoring a benchmark task
+ *   from a completed run
  */
 export type RunSourceType =
   | 'LINEAR'
@@ -1042,7 +1046,8 @@ export type RunSourceType =
   | 'AUTOFIX'
   | 'RUN_SCORER'
   | 'ORCHESTRATION'
-  | 'BENCHMARK_TRIAL';
+  | 'BENCHMARK_TRIAL'
+  | 'CREATE_BENCHMARK_TASK';
 
 /**
  * Current state of the run:
