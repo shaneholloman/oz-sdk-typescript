@@ -72,11 +72,11 @@ export interface Factory {
 
   /**
    * Primary source-control provider for the factory. GITHUB and GITLAB identify the
-   * compatibility primary when repositories span one or more forges. NONE declares a
-   * repo-less factory with no native repositories; its environment relies on
-   * setup_commands to clone from any host.
+   * compatibility primary when repositories span one or more forges. AZURE_DEVOPS
+   * identifies Azure Repos. NONE declares a repo-less factory with no native
+   * repositories; its environment relies on setup_commands to clone from any host.
    */
-  code_forge: 'GITHUB' | 'GITLAB' | 'NONE';
+  code_forge: 'GITHUB' | 'GITLAB' | 'AZURE_DEVOPS' | 'NONE';
 
   /**
    * Time the factory was created.
@@ -313,7 +313,13 @@ export namespace Factory {
     /**
      * The concrete source-control provider hosting a repository.
      */
-    code_forge?: 'GITHUB' | 'GITLAB';
+    code_forge?: 'GITHUB' | 'GITLAB' | 'AZURE_DEVOPS';
+
+    /**
+     * Provider-specific repository identity and settings, such as the Azure DevOps
+     * organization, project ID, and repository ID.
+     */
+    provider_metadata?: { [key: string]: string };
   }
 
   export interface Scoring {
