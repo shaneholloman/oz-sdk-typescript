@@ -56,7 +56,8 @@
     "minimatch": "^9.0.7",
     "js-yaml": "4.3.1",
     "handlebars": "4.7.9",
-    "picomatch": ">=2.3.2"
+    "picomatch": ">=2.3.2",
+    "browserslist": "^4.28.7"
   },
   "pnpm": {
     "overrides": {
@@ -66,7 +67,8 @@
       "minimatch": "^9.0.7",
       "js-yaml": "4.3.1",
       "handlebars": "4.7.9",
-      "picomatch": ">=2.3.2"
+      "picomatch": ">=2.3.2",
+      "browserslist": "^4.28.7"
     }
   },
   "resolutions": {
@@ -76,7 +78,8 @@
     "minimatch": "^9.0.7",
     "js-yaml": "4.3.1",
     "handlebars": "4.7.9",
-    "picomatch": ">=2.3.2"
+    "picomatch": ">=2.3.2",
+    "browserslist": "^4.28.7"
   },
   "exports": {
     ".": {
