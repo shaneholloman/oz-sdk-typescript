@@ -79,6 +79,12 @@ export interface Factory {
   code_forge: 'GITHUB' | 'GITLAB' | 'AZURE_DEVOPS' | 'NONE';
 
   /**
+   * Effective source-control providers for the factory. When the effective set is
+   * empty, this contains the primary code_forge.
+   */
+  code_forges: Array<'GITHUB' | 'GITLAB' | 'AZURE_DEVOPS' | 'NONE'>;
+
+  /**
    * Time the factory was created.
    */
   created_at: string;
