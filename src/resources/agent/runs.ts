@@ -1178,6 +1178,12 @@ export interface RunListParams extends RunsCursorPageParams {
   executor?: string;
 
   /**
+   * Query param: Filter runs to those executed by an agent associated with any
+   * factory.
+   */
+  factory_only?: boolean;
+
+  /**
    * Query param: Filter runs by factory. Matches runs executed by any of the
    * factory's agents. A UID outside the caller's accessible factories matches
    * nothing.
@@ -1252,10 +1258,10 @@ export interface RunListParams extends RunsCursorPageParams {
   /**
    * Query param: Filter by high-level task status. Can be specified multiple times
    * to match any value. `running` matches when the root or any descendant is queued,
-   * pending, claimed, or in progress. `failed`, `blocked`, and `complete` match the
-   * root state only.
+   * pending, claimed, or in progress. `failed`, `blocked`, `cancelled`, and
+   * `complete` match the root state only.
    */
-  task_status?: Array<'running' | 'failed' | 'blocked' | 'complete'>;
+  task_status?: Array<'running' | 'failed' | 'blocked' | 'cancelled' | 'complete'>;
 
   /**
    * Query param: Filter runs updated after this timestamp (RFC3339 format)
