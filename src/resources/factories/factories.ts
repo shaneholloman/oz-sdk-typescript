@@ -281,6 +281,18 @@ export namespace Factory {
     type: 'jira' | 'linear' | 'slack';
 
     /**
+     * Persisted Jira discovery scope. Present only when type is jira and the factory
+     * declares selected projects.
+     */
+    jira?: Integration.Jira | null;
+
+    /**
+     * Persisted Linear discovery scope. Present only when type is linear and the
+     * factory declares selected teams.
+     */
+    linear?: Integration.Linear | null;
+
+    /**
      * Persisted Slack settings on a factory integration. Omitted fields keep their
      * default-off behavior.
      */
@@ -288,6 +300,30 @@ export namespace Factory {
   }
 
   export namespace Integration {
+    /**
+     * Persisted Jira discovery scope. Present only when type is jira and the factory
+     * declares selected projects.
+     */
+    export interface Jira {
+      /**
+       * Jira project keys (for example APP, not the numeric project ID) that scope issue
+       * discovery and routing to the Factory FOREMAN agent.
+       */
+      project_keys: Array<string>;
+    }
+
+    /**
+     * Persisted Linear discovery scope. Present only when type is linear and the
+     * factory declares selected teams.
+     */
+    export interface Linear {
+      /**
+       * Linear team IDs that scope issue discovery and routing to the Factory FOREMAN
+       * agent.
+       */
+      team_ids: Array<string>;
+    }
+
     /**
      * Persisted Slack settings on a factory integration. Omitted fields keep their
      * default-off behavior.
