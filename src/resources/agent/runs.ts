@@ -117,7 +117,7 @@ export class Runs extends APIResource {
     runID: string,
     body: RunSubmitFollowupParams,
     options?: RequestOptions,
-  ): APIPromise<unknown> {
+  ): APIPromise<RunSubmitFollowupResponse> {
     return this._client.post(path`/agent/runs/${runID}/followups`, { body, ...options });
   }
 }
@@ -1121,7 +1121,31 @@ export namespace RunListHandoffAttachmentsResponse {
   }
 }
 
-export type RunSubmitFollowupResponse = unknown;
+/**
+ * Acknowledgement of an accepted follow-up.
+ */
+export interface RunSubmitFollowupResponse {
+  /**
+   * Identifier of the durable follow-up record, or null when the outcome did not
+   * create one (`queued_prompt`).
+   */
+  followup_id: string | null;
+
+  /**
+   * How an accepted follow-up was routed.
+   *
+   * - live_session: the message was handed to the running session. This means the
+   *   session-sharing service accepted it, not that the agent has started on it;
+   *   observe the session's event stream for the new request.
+   * - queued_prompt: the run had not started yet, so the message was appended to its
+   *   initial prompt.
+   * - handoff_execution: the previous execution had ended, so a new execution of the
+   *   same run was created to continue the conversation.
+   * - queue_pending: the message is durably queued and will be delivered once the
+   *   run can accept it.
+   */
+  outcome: 'live_session' | 'queued_prompt' | 'handoff_execution' | 'queue_pending';
+}
 
 export interface RunListParams extends RunsCursorPageParams {
   /**
@@ -1277,15 +1301,48 @@ export interface RunListParams extends RunsCursorPageParams {
 
 export interface RunSubmitFollowupParams {
   /**
-   * The follow-up message to send to the run.
+   * Files to deliver with the message, at most 25. Each entry must name an
+   * attachment previously prepared for this run through
+   * `POST /agent/runs/{runId}/attachments/prepare` and uploaded to its upload
+   * target; an unknown `attachment_id` is rejected with 422. Files are only
+   * materialized for the agent on the Oz harness; other harnesses receive a notice
+   * naming the files.
+   */
+  attachments?: Array<RunSubmitFollowupParams.Attachment>;
+
+  /**
+   * The follow-up message to send to the run. May be empty when `attachments` is
+   * non-empty.
    */
   message?: string;
 
   /**
    * Optional query mode for the follow-up. Defaults to `normal` when omitted. The
-   * server does not infer mode from prompt prefixes such as `/plan`.
+   * server does not infer mode from prompt prefixes such as `/plan`. The mode only
+   * takes effect when the follow-up is queued ahead of the run starting or starts a
+   * new execution; a follow-up injected into a live session runs in the session's
+   * current mode.
    */
   mode?: 'normal' | 'plan' | 'orchestrate';
+}
+
+export namespace RunSubmitFollowupParams {
+  /**
+   * A prepared attachment to deliver with a follow-up message.
+   */
+  export interface Attachment {
+    /**
+     * The `attachment_id` (a UUID) returned by the attachment prepare endpoint for
+     * this run.
+     */
+    attachment_id: string;
+
+    /**
+     * Optional display name shown to the agent in place of the name recorded when the
+     * attachment was prepared. The stored object is unaffected.
+     */
+    file_name?: string;
+  }
 }
 
 export declare namespace Runs {
