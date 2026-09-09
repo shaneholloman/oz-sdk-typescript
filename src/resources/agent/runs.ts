@@ -1250,6 +1250,14 @@ export interface RunListParams extends RunsCursorPageParams {
   state?: Array<RunState>;
 
   /**
+   * Query param: Filter by high-level task status. Can be specified multiple times
+   * to match any value. `running` matches when the root or any descendant is queued,
+   * pending, claimed, or in progress. `failed`, `blocked`, and `complete` match the
+   * root state only.
+   */
+  task_status?: Array<'running' | 'failed' | 'blocked' | 'complete'>;
+
+  /**
    * Query param: Filter runs updated after this timestamp (RFC3339 format)
    */
   updated_after?: string;

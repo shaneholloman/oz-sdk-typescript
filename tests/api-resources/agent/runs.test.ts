@@ -61,6 +61,7 @@ describe('resource runs', () => {
           sort_order: 'asc',
           source: 'LINEAR',
           state: ['QUEUED'],
+          task_status: ['running'],
           updated_after: '2019-12-27T18:11:19.117Z',
           team_uid: 'X-Warp-Team-Uid',
         },
