@@ -1208,11 +1208,11 @@ export interface RunListParams extends RunsCursorPageParams {
   factory_only?: boolean;
 
   /**
-   * Query param: Filter runs by factory. Matches runs executed by any of the
-   * factory's agents. A UID outside the caller's accessible factories matches
-   * nothing.
+   * Query param: Filter runs by one or more factories. Repeating this parameter
+   * matches runs executed by an agent from any selected factory. A UID outside the
+   * caller's accessible factories matches nothing.
    */
-  factory_uid?: string;
+  factory_uid?: string | Array<string>;
 
   /**
    * Query param: Filter by exact metadata key/value pairs using object notation
