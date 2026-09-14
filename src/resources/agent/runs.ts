@@ -1237,7 +1237,8 @@ export interface RunListParams extends RunsCursorPageParams {
   name?: string;
 
   /**
-   * Query param: Fuzzy search query across run title, prompt, and skill_spec
+   * Query param: Search by full run ID or run URL, or fuzzy match across run title,
+   * prompt, and skill_spec
    */
   q?: string;
 
