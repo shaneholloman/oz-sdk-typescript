@@ -765,6 +765,10 @@ export interface Error {
  *
  * - `authentication_required` — Request lacks valid authentication credentials
  * - `resource_unavailable` — Transient infrastructure issue (retryable)
+ * - `agent_stream_network_error` — MAA response stream terminally failed because
+ *   of a transport or EOF error
+ * - `agent_stream_failure` — MAA server explicitly reported a terminal response
+ *   stream failure
  * - `internal_error` — Unexpected server-side error (retryable)
  */
 export type ErrorCode =
@@ -783,6 +787,8 @@ export type ErrorCode =
   | 'conflict'
   | 'authentication_required'
   | 'resource_unavailable'
+  | 'agent_stream_network_error'
+  | 'agent_stream_failure'
   | 'internal_error';
 
 /**
