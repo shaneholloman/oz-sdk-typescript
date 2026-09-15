@@ -278,7 +278,7 @@ export namespace Factory {
      * Integration provider that can be attached to a factory. github is not accepted
      * here; repository access comes from the factory's code forge.
      */
-    type: 'jira' | 'linear' | 'slack';
+    type: 'jira' | 'linear' | 'microsoft-teams' | 'slack';
 
     /**
      * Persisted Jira discovery scope. Present only when type is jira and the factory
