@@ -593,6 +593,15 @@ export namespace RunItem {
     inference_cost_usd?: number;
 
     /**
+     * The models that actually served inference for the run, with the tokens each
+     * consumed. Used to discover what an auto-routing model resolves to. If a run is
+     * terminated before inference is complete, output a zero-token entry for that
+     * model. Omits runs that use a third-party harness, whose per-model usage is not
+     * tracked by Warp.
+     */
+    model_token_usage?: Array<RequestUsage.ModelTokenUsage>;
+
+    /**
      * Credits consumed by platform usage for the run
      */
     platform_cost?: number;
@@ -644,6 +653,39 @@ export namespace RunItem {
        * Cost of output tokens, in US dollars.
        */
       output_cost_usd: number;
+    }
+
+    /**
+     * Tokens consumed by a single model over a run.
+     */
+    export interface ModelTokenUsage {
+      /**
+       * Identifier of the model that served the inference. For `warp` and `byok` usage
+       * this is a model id drawn from the same set as `agent_config.model_id`. For
+       * `custom_endpoint` usage this is the caller's own configuration key for the
+       * endpoint.
+       */
+      model_id: string;
+
+      /**
+       * Total tokens this model consumed, across every usage category.
+       */
+      total_tokens: number;
+
+      /**
+       * How a model's inference was accessed:
+       *
+       * - warp: through Warp-provided model access
+       * - byok: through the caller's own provider API key
+       * - custom_endpoint: through a caller-configured model endpoint
+       */
+      usage_type: 'warp' | 'byok' | 'custom_endpoint';
+
+      /**
+       * total_tokens split by the kind of work the tokens were spent on, keyed by usage
+       * category (e.g., primary_agent, tool_summarization, etc).
+       */
+      tokens_by_category?: { [key: string]: number };
     }
 
     /**
