@@ -504,6 +504,7 @@ export interface RunItem {
    * - SELF_IMPROVEMENT: Created by Warp's self-improvement pipeline
    * - GITHUB_WEBHOOK: Created from a GitHub webhook event
    * - GITLAB_WEBHOOK: Created from a GitLab webhook event
+   * - AZURE_DEVOPS_WEBHOOK: Created from an Azure DevOps webhook event
    * - AUTOFIX: Created by Warp's autofix pipeline
    * - RUN_SCORER: Created by Warp's run-scoring judge
    * - ORCHESTRATION: Created as a child run by the orchestration layer
@@ -1069,6 +1070,7 @@ export namespace RunItem {
  * - SELF_IMPROVEMENT: Created by Warp's self-improvement pipeline
  * - GITHUB_WEBHOOK: Created from a GitHub webhook event
  * - GITLAB_WEBHOOK: Created from a GitLab webhook event
+ * - AZURE_DEVOPS_WEBHOOK: Created from an Azure DevOps webhook event
  * - AUTOFIX: Created by Warp's autofix pipeline
  * - RUN_SCORER: Created by Warp's run-scoring judge
  * - ORCHESTRATION: Created as a child run by the orchestration layer
@@ -1093,6 +1095,7 @@ export type RunSourceType =
   | 'SELF_IMPROVEMENT'
   | 'GITHUB_WEBHOOK'
   | 'GITLAB_WEBHOOK'
+  | 'AZURE_DEVOPS_WEBHOOK'
   | 'AUTOFIX'
   | 'RUN_SCORER'
   | 'ORCHESTRATION'
