@@ -284,12 +284,28 @@ export namespace ArtifactItem {
        */
       size_bytes?: number;
 
+      thumbnail?: Data.Thumbnail;
+
       /**
        * Short, badge-visible label for the artifact. For recording artifacts, this is
        * the agent-authored title shown in Warp web and blocklist badges. Distinct from
        * description, which is longer and shown in detail views.
        */
       title?: string;
+    }
+
+    export namespace Data {
+      export interface Thumbnail {
+        /**
+         * Time-limited signed URL to download the video's thumbnail image
+         */
+        download_url: string;
+
+        /**
+         * Timestamp when the thumbnail download URL expires (RFC3339)
+         */
+        expires_at: string;
+      }
     }
   }
 
