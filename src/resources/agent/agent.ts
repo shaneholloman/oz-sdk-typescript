@@ -292,9 +292,10 @@ export interface AmbientAgentConfig {
   harness_auth_secrets?: AmbientAgentConfig.HarnessAuthSecrets;
 
   /**
-   * Number of minutes to keep the agent environment alive after task completion. If
-   * not set, defaults to 10 minutes. Maximum allowed value is min(60,
-   * floor(max_instance_runtime_seconds / 60) for your billing tier).
+   * Number of minutes to keep the agent environment alive after task completion. Set
+   * to 0 to shut down immediately after task completion. If not set, defaults to 10
+   * minutes. Maximum allowed value is min(60, floor(max_instance_runtime_seconds
+   * / 60) for your billing tier).
    */
   idle_timeout_minutes?: number;
 
