@@ -112,6 +112,18 @@ Methods:
 - <code title="get /factory">client.factories.<a href="./src/resources/factories/factories.ts">list</a>({ ...params }) -> FactoriesFactoriesCursorPage</code>
 - <code title="get /factory/{uid}">client.factories.<a href="./src/resources/factories/factories.ts">get</a>(uid) -> Factory</code>
 
+## Inbox
+
+Types:
+
+- <code><a href="./src/resources/factories/inbox.ts">InboxItem</a></code>
+- <code><a href="./src/resources/factories/inbox.ts">InboxRecipient</a></code>
+- <code><a href="./src/resources/factories/inbox.ts">InboxScope</a></code>
+
+Methods:
+
+- <code title="get /factory-inbox">client.factories.inbox.<a href="./src/resources/factories/inbox.ts">list</a>({ ...params }) -> InboxItemsFactoryInboxCursorPage</code>
+
 ## Runs
 
 Types:

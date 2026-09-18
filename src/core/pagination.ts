@@ -172,6 +172,74 @@ export class RunsCursorPage<Item> extends AbstractPage<Item> implements RunsCurs
   }
 }
 
+export interface FactoryInboxCursorPageResponse<Item> {
+  items: Array<Item>;
+
+  page_info: FactoryInboxCursorPageResponse.PageInfo;
+}
+
+export namespace FactoryInboxCursorPageResponse {
+  export interface PageInfo {
+    has_next_page?: boolean;
+
+    next_cursor?: string;
+  }
+}
+
+export interface FactoryInboxCursorPageParams {
+  cursor?: string;
+
+  limit?: number;
+}
+
+export class FactoryInboxCursorPage<Item>
+  extends AbstractPage<Item>
+  implements FactoryInboxCursorPageResponse<Item>
+{
+  items: Array<Item>;
+
+  page_info: FactoryInboxCursorPageResponse.PageInfo;
+
+  constructor(
+    client: OzAPI,
+    response: Response,
+    body: FactoryInboxCursorPageResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
+    super(client, response, body, options);
+
+    this.items = body.items || [];
+    this.page_info = body.page_info || {};
+  }
+
+  getPaginatedItems(): Item[] {
+    return this.items ?? [];
+  }
+
+  override hasNextPage(): boolean {
+    if (this.page_info?.has_next_page === false) {
+      return false;
+    }
+
+    return super.hasNextPage();
+  }
+
+  nextPageRequestOptions(): PageRequestOptions | null {
+    const cursor = this.page_info?.next_cursor;
+    if (!cursor) {
+      return null;
+    }
+
+    return {
+      ...this.options,
+      query: {
+        ...maybeObj(this.options.query),
+        cursor,
+      },
+    };
+  }
+}
+
 export interface FactoriesCursorPageResponse<Item> {
   factories: Array<Item>;
 

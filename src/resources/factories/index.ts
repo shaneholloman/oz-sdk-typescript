@@ -6,4 +6,12 @@ export {
   type FactoryListParams,
   type FactoriesFactoriesCursorPage,
 } from './factories';
+export {
+  Inbox,
+  type InboxItem,
+  type InboxRecipient,
+  type InboxScope,
+  type InboxListParams,
+  type InboxItemsFactoryInboxCursorPage,
+} from './inbox';
 export { Runs, type RunCreateResponse, type RunCreateParams } from './runs';

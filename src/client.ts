@@ -19,6 +19,8 @@ import {
   AbstractPage,
   type FactoriesCursorPageParams,
   FactoriesCursorPageResponse,
+  type FactoryInboxCursorPageParams,
+  FactoryInboxCursorPageResponse,
   type RunsCursorPageParams,
   RunsCursorPageResponse,
 } from './core/pagination';
@@ -821,6 +823,12 @@ export declare namespace OzAPI {
   export {
     type RunsCursorPageParams as RunsCursorPageParams,
     type RunsCursorPageResponse as RunsCursorPageResponse,
+  };
+
+  export import FactoryInboxCursorPage = Pagination.FactoryInboxCursorPage;
+  export {
+    type FactoryInboxCursorPageParams as FactoryInboxCursorPageParams,
+    type FactoryInboxCursorPageResponse as FactoryInboxCursorPageResponse,
   };
 
   export import FactoriesCursorPage = Pagination.FactoriesCursorPage;

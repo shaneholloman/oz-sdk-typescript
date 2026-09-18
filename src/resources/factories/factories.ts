@@ -2,6 +2,15 @@
 
 import { APIResource } from '../../core/resource';
 import * as AgentAPI from '../agent/agent';
+import * as InboxAPI from './inbox';
+import {
+  Inbox,
+  InboxItem,
+  InboxItemsFactoryInboxCursorPage,
+  InboxListParams,
+  InboxRecipient,
+  InboxScope,
+} from './inbox';
 import * as RunsAPI from './runs';
 import { RunCreateParams, RunCreateResponse, Runs } from './runs';
 import { APIPromise } from '../../core/api-promise';
@@ -14,6 +23,7 @@ import { path } from '../../internal/utils/path';
  * Operations for creating and managing factories
  */
 export class Factories extends APIResource {
+  inbox: InboxAPI.Inbox = new InboxAPI.Inbox(this._client);
   runs: RunsAPI.Runs = new RunsAPI.Runs(this._client);
 
   /**
@@ -408,6 +418,7 @@ export interface FactoryListParams extends FactoriesCursorPageParams {
   team_uid?: string;
 }
 
+Factories.Inbox = Inbox;
 Factories.Runs = Runs;
 
 export declare namespace Factories {
@@ -415,6 +426,15 @@ export declare namespace Factories {
     type Factory as Factory,
     type FactoriesFactoriesCursorPage as FactoriesFactoriesCursorPage,
     type FactoryListParams as FactoryListParams,
+  };
+
+  export {
+    Inbox as Inbox,
+    type InboxItem as InboxItem,
+    type InboxRecipient as InboxRecipient,
+    type InboxScope as InboxScope,
+    type InboxItemsFactoryInboxCursorPage as InboxItemsFactoryInboxCursorPage,
+    type InboxListParams as InboxListParams,
   };
 
   export {
