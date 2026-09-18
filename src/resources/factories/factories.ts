@@ -303,8 +303,14 @@ export namespace Factory {
     linear?: Integration.Linear | null;
 
     /**
-     * Persisted Slack settings on a factory integration. Omitted fields keep their
-     * default-off behavior.
+     * Plain channel-thread reply settings. These apply when the shared per-Factory
+     * reply-setting rollout is enabled.
+     */
+    'microsoft-teams'?: Integration.MicrosoftTeams | null;
+
+    /**
+     * Plain channel-thread reply settings. These apply when the shared per-Factory
+     * reply-setting rollout is enabled.
      */
     slack?: Integration.Slack | null;
   }
@@ -335,8 +341,21 @@ export namespace Factory {
     }
 
     /**
-     * Persisted Slack settings on a factory integration. Omitted fields keep their
-     * default-off behavior.
+     * Plain channel-thread reply settings. These apply when the shared per-Factory
+     * reply-setting rollout is enabled.
+     */
+    export interface MicrosoftTeams {
+      /**
+       * When true, eligible plain channel thread replies still reach the reply-intent
+       * classifier. When false or omitted, those replies are ignored unless they
+       * @-mention the Factory. Direct messages are unchanged.
+       */
+      auto_respond_to_thread_replies?: boolean | null;
+    }
+
+    /**
+     * Plain channel-thread reply settings. These apply when the shared per-Factory
+     * reply-setting rollout is enabled.
      */
     export interface Slack {
       /**
