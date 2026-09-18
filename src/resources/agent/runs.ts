@@ -198,6 +198,14 @@ export namespace ArtifactItem {
       branch: string;
 
       /**
+       * Current state of the pull request as last reported by the code host's webhooks.
+       * `unknown` means Warp has no live provider record for this pull request (for
+       * example, the repository's code host integration is not connected to the run's
+       * team).
+       */
+      status: 'open' | 'draft' | 'merged' | 'closed' | 'unknown';
+
+      /**
        * URL of the pull request
        */
       url: string;
