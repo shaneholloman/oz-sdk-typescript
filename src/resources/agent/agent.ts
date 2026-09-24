@@ -336,6 +336,13 @@ export interface AmbientAgentConfig {
   runner_id?: string;
 
   /**
+   * Optional run-specific managed secret allowlist. Omission and an empty array both
+   * add no generic secrets. Secret references from the resolved environment and
+   * execution principal are still unioned into the run's secret scope.
+   */
+  secrets?: Array<AmbientAgentConfig.Secret>;
+
+  /**
    * Configures sharing behavior for the run's shared session; when set, the worker
    * emits `--share public:<level>` and the bundled Warp client applies an
    * anyone-with-link ACL to the shared session once it has bootstrapped. The same
@@ -476,6 +483,16 @@ export namespace AmbientAgentConfig {
      * UID of the memory store.
      */
     uid: string;
+  }
+
+  /**
+   * Reference to a managed secret by name.
+   */
+  export interface Secret {
+    /**
+     * Name of the managed secret.
+     */
+    name: string;
   }
 
   /**
@@ -642,6 +659,13 @@ export interface CloudEnvironmentConfig {
   providers?: CloudEnvironmentConfig.Providers;
 
   /**
+   * Managed secret references contributed by this environment. Omission and an empty
+   * array both contribute no secrets. These references are unioned with references
+   * from the run config and execution principal.
+   */
+  secrets?: Array<CloudEnvironmentConfig.Secret>;
+
+  /**
    * Shell commands to run during environment setup
    */
   setup_commands?: Array<string>;
@@ -673,6 +697,16 @@ export namespace CloudEnvironmentConfig {
      * GCP Workload Identity Federation settings
      */
     gcp?: AgentAPI.GcpProviderConfig;
+  }
+
+  /**
+   * Reference to a managed secret by name.
+   */
+  export interface Secret {
+    /**
+     * Name of the managed secret.
+     */
+    name: string;
   }
 }
 
