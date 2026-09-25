@@ -119,10 +119,14 @@ Types:
 - <code><a href="./src/resources/factories/inbox.ts">InboxItem</a></code>
 - <code><a href="./src/resources/factories/inbox.ts">InboxRecipient</a></code>
 - <code><a href="./src/resources/factories/inbox.ts">InboxScope</a></code>
+- <code><a href="./src/resources/factories/inbox.ts">InboxMarkReadResponse</a></code>
+- <code><a href="./src/resources/factories/inbox.ts">InboxMarkUnreadResponse</a></code>
 
 Methods:
 
 - <code title="get /factory-inbox">client.factories.inbox.<a href="./src/resources/factories/inbox.ts">list</a>({ ...params }) -> InboxItemsFactoryInboxCursorPage</code>
+- <code title="post /factory-inbox/notifications/read">client.factories.inbox.<a href="./src/resources/factories/inbox.ts">markRead</a>({ ...params }) -> InboxMarkReadResponse</code>
+- <code title="post /factory-inbox/notifications/unread">client.factories.inbox.<a href="./src/resources/factories/inbox.ts">markUnread</a>({ ...params }) -> InboxMarkUnreadResponse</code>
 
 ## Runs
 

@@ -11,7 +11,11 @@ export {
   type InboxItem,
   type InboxRecipient,
   type InboxScope,
+  type InboxMarkReadResponse,
+  type InboxMarkUnreadResponse,
   type InboxListParams,
+  type InboxMarkReadParams,
+  type InboxMarkUnreadParams,
   type InboxItemsFactoryInboxCursorPage,
 } from './inbox';
 export { Runs, type RunCreateResponse, type RunCreateParams } from './runs';

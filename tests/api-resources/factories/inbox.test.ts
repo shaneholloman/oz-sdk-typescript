@@ -37,4 +37,38 @@ describe('resource inbox', () => {
       ),
     ).rejects.toThrow(OzAPI.NotFoundError);
   });
+
+  // Mock server tests are disabled
+  test.skip('markRead: only required params', async () => {
+    const responsePromise = client.factories.inbox.markRead({ notification_uids: ['string'] });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('markRead: required and optional params', async () => {
+    const response = await client.factories.inbox.markRead({ notification_uids: ['string'] });
+  });
+
+  // Mock server tests are disabled
+  test.skip('markUnread: only required params', async () => {
+    const responsePromise = client.factories.inbox.markUnread({ notification_uids: ['string'] });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('markUnread: required and optional params', async () => {
+    const response = await client.factories.inbox.markUnread({ notification_uids: ['string'] });
+  });
 });

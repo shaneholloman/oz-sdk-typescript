@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import { APIPromise } from '../../core/api-promise';
 import {
   FactoryInboxCursorPage,
   type FactoryInboxCursorPageParams,
@@ -18,7 +19,9 @@ export class Inbox extends APIResource {
    * principal and active team. The default `mine` scope preserves the personal Inbox
    * and requires user credentials. The `team` scope lists notifications assigned to
    * any live recipient and can be used by user or service-account credentials.
-   * Delivery routing is configured separately from Inbox assignment.
+   * Delivery routing is configured separately from Inbox assignment. Personal read
+   * state (`is_read`) is included only in `mine` scope and omitted in `team` scope,
+   * including when filtering by recipient.
    */
   list(
     params: InboxListParams | null | undefined = {},
@@ -33,6 +36,28 @@ export class Inbox extends APIResource {
         options?.headers,
       ]),
     });
+  }
+
+  /**
+   * Mark a batch of notifications as read for the authenticated user after checking
+   * access to each factory. The caller must be a recipient of each existing
+   * notification, and the notification must remain active; otherwise its outcome is
+   * unsuccessful. Missing notifications are successful no-ops. Outcomes are returned
+   * in request order.
+   */
+  markRead(body: InboxMarkReadParams, options?: RequestOptions): APIPromise<InboxMarkReadResponse> {
+    return this._client.post('/factory-inbox/notifications/read', { body, ...options });
+  }
+
+  /**
+   * Mark a batch of notifications as unread for the authenticated user after
+   * checking access to each factory. The caller must be a recipient of each existing
+   * notification, and the notification must remain active; otherwise its outcome is
+   * unsuccessful. Missing notifications are successful no-ops. Outcomes are returned
+   * in request order.
+   */
+  markUnread(body: InboxMarkUnreadParams, options?: RequestOptions): APIPromise<InboxMarkUnreadResponse> {
+    return this._client.post('/factory-inbox/notifications/unread', { body, ...options });
   }
 }
 
@@ -87,6 +112,13 @@ export interface InboxItem {
   description?: string;
 
   /**
+   * Whether the authenticated user has read this notification. Always present in
+   * `mine` scope, including when false. Omitted in `team` scope, even when filtering
+   * by recipient.
+   */
+  is_read?: boolean;
+
+  /**
    * Server-derived link back to the task's origin, when present.
    */
   origin_link?: string;
@@ -128,6 +160,30 @@ export interface InboxRecipient {
  */
 export type InboxScope = 'mine' | 'team';
 
+export interface InboxMarkReadResponse {
+  outcomes: Array<InboxMarkReadResponse.Outcome>;
+}
+
+export namespace InboxMarkReadResponse {
+  export interface Outcome {
+    notification_uid: string;
+
+    ok: boolean;
+  }
+}
+
+export interface InboxMarkUnreadResponse {
+  outcomes: Array<InboxMarkUnreadResponse.Outcome>;
+}
+
+export namespace InboxMarkUnreadResponse {
+  export interface Outcome {
+    notification_uid: string;
+
+    ok: boolean;
+  }
+}
+
 export interface InboxListParams extends FactoryInboxCursorPageParams {
   /**
    * Query param: Exact Factory UID filter, intersected with authorized factories.
@@ -154,12 +210,24 @@ export interface InboxListParams extends FactoryInboxCursorPageParams {
   team_uid?: string;
 }
 
+export interface InboxMarkReadParams {
+  notification_uids: Array<string>;
+}
+
+export interface InboxMarkUnreadParams {
+  notification_uids: Array<string>;
+}
+
 export declare namespace Inbox {
   export {
     type InboxItem as InboxItem,
     type InboxRecipient as InboxRecipient,
     type InboxScope as InboxScope,
+    type InboxMarkReadResponse as InboxMarkReadResponse,
+    type InboxMarkUnreadResponse as InboxMarkUnreadResponse,
     type InboxItemsFactoryInboxCursorPage as InboxItemsFactoryInboxCursorPage,
     type InboxListParams as InboxListParams,
+    type InboxMarkReadParams as InboxMarkReadParams,
+    type InboxMarkUnreadParams as InboxMarkUnreadParams,
   };
 }

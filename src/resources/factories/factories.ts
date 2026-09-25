@@ -8,6 +8,10 @@ import {
   InboxItem,
   InboxItemsFactoryInboxCursorPage,
   InboxListParams,
+  InboxMarkReadParams,
+  InboxMarkReadResponse,
+  InboxMarkUnreadParams,
+  InboxMarkUnreadResponse,
   InboxRecipient,
   InboxScope,
 } from './inbox';
@@ -452,8 +456,12 @@ export declare namespace Factories {
     type InboxItem as InboxItem,
     type InboxRecipient as InboxRecipient,
     type InboxScope as InboxScope,
+    type InboxMarkReadResponse as InboxMarkReadResponse,
+    type InboxMarkUnreadResponse as InboxMarkUnreadResponse,
     type InboxItemsFactoryInboxCursorPage as InboxItemsFactoryInboxCursorPage,
     type InboxListParams as InboxListParams,
+    type InboxMarkReadParams as InboxMarkReadParams,
+    type InboxMarkUnreadParams as InboxMarkUnreadParams,
   };
 
   export {
