@@ -351,8 +351,9 @@ export namespace Factory {
     export interface MicrosoftTeams {
       /**
        * When true, eligible plain channel thread replies still reach the reply-intent
-       * classifier. When false or omitted, those replies are ignored unless they
-       * @-mention the Factory. Direct messages are unchanged.
+       * classifier. When false, those replies are ignored unless they @-mention the
+       * Factory. Each provider defines the omitted default. Direct messages are
+       * unchanged.
        */
       auto_respond_to_thread_replies?: boolean | null;
     }
@@ -364,8 +365,9 @@ export namespace Factory {
     export interface Slack {
       /**
        * When true, eligible plain channel thread replies still reach the reply-intent
-       * classifier. When false or omitted, those replies are ignored unless they
-       * @-mention the Factory. Direct messages are unchanged.
+       * classifier. When false, those replies are ignored unless they @-mention the
+       * Factory. Each provider defines the omitted default. Direct messages are
+       * unchanged.
        */
       auto_respond_to_thread_replies?: boolean | null;
     }
