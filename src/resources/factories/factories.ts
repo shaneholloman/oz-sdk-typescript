@@ -148,6 +148,13 @@ export interface Factory {
    */
   repositories: Array<Factory.Repository>;
 
+  /**
+   * Sparse execution defaults for scorers. An omitted field inherits the
+   * corresponding agent default; an explicit empty collection overrides the agent
+   * default with no values.
+   */
+  scorer_defaults: Factory.ScorerDefaults;
+
   scoring: Factory.Scoring;
 
   /**
@@ -397,6 +404,42 @@ export namespace Factory {
      * organization, project ID, and repository ID.
      */
     provider_metadata?: { [key: string]: string };
+  }
+
+  /**
+   * Sparse execution defaults for scorers. An omitted field inherits the
+   * corresponding agent default; an explicit empty collection overrides the agent
+   * default with no values.
+   */
+  export interface ScorerDefaults {
+    /**
+     * Default runner UID for scorers. Omitted to inherit the agent default.
+     */
+    default_runner_uid?: string;
+
+    /**
+     * Scorer-default MCP servers. Omitted to inherit the agent defaults; an empty
+     * object explicitly clears them.
+     */
+    mcp_servers?: { [key: string]: AgentAPI.McpServerConfig };
+
+    /**
+     * Scorer-default secrets. Omitted to inherit the agent defaults; an empty array
+     * explicitly clears them.
+     */
+    secrets?: Array<ScorerDefaults.Secret>;
+  }
+
+  export namespace ScorerDefaults {
+    /**
+     * Reference to a managed secret by name.
+     */
+    export interface Secret {
+      /**
+       * Name of the managed secret.
+       */
+      name: string;
+    }
   }
 
   export interface Scoring {
