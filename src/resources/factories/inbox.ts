@@ -123,6 +123,8 @@ export interface InboxItem {
    */
   origin_link?: string;
 
+  questions?: Array<InboxItem.Question>;
+
   /**
    * Producing run ID from factory_task_notifications.created_by_run_id. Present when
    * the producing run is known.
@@ -138,6 +140,20 @@ export interface InboxItem {
    * Canonical artifact URLs in a composite PR review request.
    */
   urls?: Array<string>;
+}
+
+export namespace InboxItem {
+  export interface Question {
+    id: string;
+
+    options: Array<string>;
+
+    question: string;
+
+    type: 'single_select' | 'multi_select';
+
+    recommended_option_index?: number;
+  }
 }
 
 /**
