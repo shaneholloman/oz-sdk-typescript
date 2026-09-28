@@ -1031,6 +1031,12 @@ export namespace AgentGetArtifactResponse {
      * Response data for a screenshot artifact, including a signed download URL.
      */
     data: ScreenshotArtifactResponse.Data;
+
+    /**
+     * Links to the originating run and pull requests reported in its tree.
+     * Destinations enforce their own access rules.
+     */
+    source_links?: ScreenshotArtifactResponse.SourceLinks;
   }
 
   export namespace ScreenshotArtifactResponse {
@@ -1058,6 +1064,23 @@ export namespace AgentGetArtifactResponse {
        */
       description?: string;
     }
+
+    /**
+     * Links to the originating run and pull requests reported in its tree.
+     * Destinations enforce their own access rules.
+     */
+    export interface SourceLinks {
+      /**
+       * Distinct pull requests reported by runs in the same tree.
+       */
+      pull_request_urls?: Array<string>;
+
+      /**
+       * Factory run page for the originating root run, when bound to a live Factory
+       * task.
+       */
+      run_url?: string;
+    }
   }
 
   /**
@@ -1083,6 +1106,12 @@ export namespace AgentGetArtifactResponse {
      * Response data for a file artifact, including a signed download URL.
      */
     data: FileArtifactResponse.Data;
+
+    /**
+     * Links to the originating run and pull requests reported in its tree.
+     * Destinations enforce their own access rules.
+     */
+    source_links?: FileArtifactResponse.SourceLinks;
   }
 
   export namespace FileArtifactResponse {
@@ -1132,6 +1161,23 @@ export namespace AgentGetArtifactResponse {
        * description, which is longer and shown in detail views.
        */
       title?: string;
+    }
+
+    /**
+     * Links to the originating run and pull requests reported in its tree.
+     * Destinations enforce their own access rules.
+     */
+    export interface SourceLinks {
+      /**
+       * Distinct pull requests reported by runs in the same tree.
+       */
+      pull_request_urls?: Array<string>;
+
+      /**
+       * Factory run page for the originating root run, when bound to a live Factory
+       * task.
+       */
+      run_url?: string;
     }
   }
 }
