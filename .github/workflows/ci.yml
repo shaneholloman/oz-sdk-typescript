@@ -65,6 +65,7 @@ jobs:
 
       - name: Check build
         run: ./scripts/build
+
   test:
     timeout-minutes: 10
     name: test
