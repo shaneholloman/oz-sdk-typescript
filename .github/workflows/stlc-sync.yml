@@ -2,9 +2,8 @@ name: Sync SDK repos
 
 # Keeps the staging and production trunks in sync. Each job self-routes by
 # repo + event, so this one file can live in both repos and only the right
-# job runs. The notify job is eager-only (the poll covers it) and no-ops when
-# its token isn't set. Tracking reseal in warp-server happens on its normal
-# triggers (develop builds / manual dispatch of stlc-sync-tracking).
+# job runs. The notify job is eager-only (the poll covers it). Tracking reseal
+# in warp-server happens on develop builds or manual stlc-sync-tracking dispatch.
 on:
   schedule:
     # back-sync poll: a cheap pure-git check, twice hourly so an unsynced production
