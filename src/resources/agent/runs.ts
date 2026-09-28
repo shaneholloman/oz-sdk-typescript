@@ -606,12 +606,6 @@ export namespace RunItem {
     inference_cost?: number;
 
     /**
-     * Charged dollar cost of LLM inference, split by token type. Omitted when the data
-     * is not available.
-     */
-    inference_cost_breakdown_usd?: RequestUsage.InferenceCostBreakdownUsd;
-
-    /**
      * inference_cost in US dollars, converted at the owning team's current credit
      * price. An approximate cost, not a billed amount.
      */
@@ -644,42 +638,14 @@ export namespace RunItem {
     total_tokens?: number;
 
     /**
-     * Full-granularity token and dollar-cost breakdown for the run's conversation,
+     * Full-granularity token and charged-cost breakdown for the run's conversation,
      * keyed by usage category (for example, primary_agent or conversation_compaction)
-     * and model id; differs from total_tokens/inference_cost_breakdown_usd, which
-     * combine usage across all categories and models. Omitted when the data is not
-     * available.
+     * and model id. Omitted when the data is not available.
      */
     usage_by_category?: { [key: string]: RequestUsage.UsageByCategory };
   }
 
   export namespace RequestUsage {
-    /**
-     * Charged dollar cost of LLM inference, split by token type. Omitted when the data
-     * is not available.
-     */
-    export interface InferenceCostBreakdownUsd {
-      /**
-       * Cost of cache-read input tokens, in US dollars.
-       */
-      input_cache_read_cost_usd: number;
-
-      /**
-       * Cost of cache-write input tokens, in US dollars.
-       */
-      input_cache_write_cost_usd: number;
-
-      /**
-       * Cost of non-cached input tokens, in US dollars.
-       */
-      input_cost_usd: number;
-
-      /**
-       * Cost of output tokens, in US dollars.
-       */
-      output_cost_usd: number;
-    }
-
     /**
      * Tokens consumed by a single model over a run.
      */
@@ -719,9 +685,9 @@ export namespace RunItem {
      */
     export interface UsageByCategory {
       /**
-       * Platform usage charged for this category, in US dollars.
+       * Platform usage charged for this category, in US cents.
        */
-      platform_usage_usd: number;
+      platform_usage_in_cents: number;
 
       /**
        * Inference usage charged using a user's own API key, keyed by model ID.
@@ -742,16 +708,16 @@ export namespace RunItem {
 
     export namespace UsageByCategory {
       /**
-       * Full token count and dollar-cost detail inference usage. The counts and cost
-       * describe the same usage (e.g. token_count.input tokens cost
-       * cost_usd.input_cost_usd in total).
+       * Full token count and charged-cost detail for inference usage. The counts and
+       * cost describe the same usage (e.g. token_count.input tokens cost
+       * cost_in_cents.input_cost_in_cents in total).
        */
       export interface ByokInferenceUsage {
         /**
-         * Charged dollar cost of LLM inference, split by token type. Omitted when the data
-         * is not available.
+         * Charged cost of LLM inference in US cents, split by token type. Omitted when the
+         * data is not available.
          */
-        cost_usd: ByokInferenceUsage.CostUsd;
+        cost_in_cents: ByokInferenceUsage.CostInCents;
 
         /**
          * A per-token-type token count.
@@ -759,9 +725,9 @@ export namespace RunItem {
         token_count: ByokInferenceUsage.TokenCount;
 
         /**
-         * Total cost of those web searches, in US dollars.
+         * Total cost of those web searches, in US cents.
          */
-        web_search_cost_usd: number;
+        web_search_cost_in_cents: number;
 
         /**
          * Number of web searches performed by this model.
@@ -771,29 +737,29 @@ export namespace RunItem {
 
       export namespace ByokInferenceUsage {
         /**
-         * Charged dollar cost of LLM inference, split by token type. Omitted when the data
-         * is not available.
+         * Charged cost of LLM inference in US cents, split by token type. Omitted when the
+         * data is not available.
          */
-        export interface CostUsd {
+        export interface CostInCents {
           /**
-           * Cost of cache-read input tokens, in US dollars.
+           * Cost of cache-read input tokens, in US cents.
            */
-          input_cache_read_cost_usd: number;
+          input_cache_read_cost_in_cents: number;
 
           /**
-           * Cost of cache-write input tokens, in US dollars.
+           * Cost of cache-write input tokens, in US cents.
            */
-          input_cache_write_cost_usd: number;
+          input_cache_write_cost_in_cents: number;
 
           /**
-           * Cost of non-cached input tokens, in US dollars.
+           * Cost of non-cached input tokens, in US cents.
            */
-          input_cost_usd: number;
+          input_cost_in_cents: number;
 
           /**
-           * Cost of output tokens, in US dollars.
+           * Cost of output tokens, in US cents.
            */
-          output_cost_usd: number;
+          output_cost_in_cents: number;
         }
 
         /**
@@ -823,16 +789,16 @@ export namespace RunItem {
       }
 
       /**
-       * Full token count and dollar-cost detail inference usage. The counts and cost
-       * describe the same usage (e.g. token_count.input tokens cost
-       * cost_usd.input_cost_usd in total).
+       * Full token count and charged-cost detail for inference usage. The counts and
+       * cost describe the same usage (e.g. token_count.input tokens cost
+       * cost_in_cents.input_cost_in_cents in total).
        */
       export interface CustomEndpointInferenceUsage {
         /**
-         * Charged dollar cost of LLM inference, split by token type. Omitted when the data
-         * is not available.
+         * Charged cost of LLM inference in US cents, split by token type. Omitted when the
+         * data is not available.
          */
-        cost_usd: CustomEndpointInferenceUsage.CostUsd;
+        cost_in_cents: CustomEndpointInferenceUsage.CostInCents;
 
         /**
          * A per-token-type token count.
@@ -840,9 +806,9 @@ export namespace RunItem {
         token_count: CustomEndpointInferenceUsage.TokenCount;
 
         /**
-         * Total cost of those web searches, in US dollars.
+         * Total cost of those web searches, in US cents.
          */
-        web_search_cost_usd: number;
+        web_search_cost_in_cents: number;
 
         /**
          * Number of web searches performed by this model.
@@ -852,29 +818,29 @@ export namespace RunItem {
 
       export namespace CustomEndpointInferenceUsage {
         /**
-         * Charged dollar cost of LLM inference, split by token type. Omitted when the data
-         * is not available.
+         * Charged cost of LLM inference in US cents, split by token type. Omitted when the
+         * data is not available.
          */
-        export interface CostUsd {
+        export interface CostInCents {
           /**
-           * Cost of cache-read input tokens, in US dollars.
+           * Cost of cache-read input tokens, in US cents.
            */
-          input_cache_read_cost_usd: number;
+          input_cache_read_cost_in_cents: number;
 
           /**
-           * Cost of cache-write input tokens, in US dollars.
+           * Cost of cache-write input tokens, in US cents.
            */
-          input_cache_write_cost_usd: number;
+          input_cache_write_cost_in_cents: number;
 
           /**
-           * Cost of non-cached input tokens, in US dollars.
+           * Cost of non-cached input tokens, in US cents.
            */
-          input_cost_usd: number;
+          input_cost_in_cents: number;
 
           /**
-           * Cost of output tokens, in US dollars.
+           * Cost of output tokens, in US cents.
            */
-          output_cost_usd: number;
+          output_cost_in_cents: number;
         }
 
         /**
@@ -904,16 +870,16 @@ export namespace RunItem {
       }
 
       /**
-       * Full token count and dollar-cost detail inference usage. The counts and cost
-       * describe the same usage (e.g. token_count.input tokens cost
-       * cost_usd.input_cost_usd in total).
+       * Full token count and charged-cost detail for inference usage. The counts and
+       * cost describe the same usage (e.g. token_count.input tokens cost
+       * cost_in_cents.input_cost_in_cents in total).
        */
       export interface DirectAPIInferenceUsage {
         /**
-         * Charged dollar cost of LLM inference, split by token type. Omitted when the data
-         * is not available.
+         * Charged cost of LLM inference in US cents, split by token type. Omitted when the
+         * data is not available.
          */
-        cost_usd: DirectAPIInferenceUsage.CostUsd;
+        cost_in_cents: DirectAPIInferenceUsage.CostInCents;
 
         /**
          * A per-token-type token count.
@@ -921,9 +887,9 @@ export namespace RunItem {
         token_count: DirectAPIInferenceUsage.TokenCount;
 
         /**
-         * Total cost of those web searches, in US dollars.
+         * Total cost of those web searches, in US cents.
          */
-        web_search_cost_usd: number;
+        web_search_cost_in_cents: number;
 
         /**
          * Number of web searches performed by this model.
@@ -933,29 +899,29 @@ export namespace RunItem {
 
       export namespace DirectAPIInferenceUsage {
         /**
-         * Charged dollar cost of LLM inference, split by token type. Omitted when the data
-         * is not available.
+         * Charged cost of LLM inference in US cents, split by token type. Omitted when the
+         * data is not available.
          */
-        export interface CostUsd {
+        export interface CostInCents {
           /**
-           * Cost of cache-read input tokens, in US dollars.
+           * Cost of cache-read input tokens, in US cents.
            */
-          input_cache_read_cost_usd: number;
+          input_cache_read_cost_in_cents: number;
 
           /**
-           * Cost of cache-write input tokens, in US dollars.
+           * Cost of cache-write input tokens, in US cents.
            */
-          input_cache_write_cost_usd: number;
+          input_cache_write_cost_in_cents: number;
 
           /**
-           * Cost of non-cached input tokens, in US dollars.
+           * Cost of non-cached input tokens, in US cents.
            */
-          input_cost_usd: number;
+          input_cost_in_cents: number;
 
           /**
-           * Cost of output tokens, in US dollars.
+           * Cost of output tokens, in US cents.
            */
-          output_cost_usd: number;
+          output_cost_in_cents: number;
         }
 
         /**
