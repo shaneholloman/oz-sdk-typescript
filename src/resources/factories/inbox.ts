@@ -107,6 +107,11 @@ export interface InboxItem {
   title: string;
 
   /**
+   * Ordered artifact links with optional provider PR/MR titles.
+   */
+  artifacts?: Array<InboxItem.Artifact>;
+
+  /**
    * Notification body, when present.
    */
   description?: string;
@@ -137,12 +142,27 @@ export interface InboxItem {
   url?: string;
 
   /**
-   * Canonical artifact URLs in a composite PR review request.
+   * Legacy artifact URLs; prefer artifacts for links and titles.
    */
   urls?: Array<string>;
 }
 
 export namespace InboxItem {
+  /**
+   * An inbox artifact link with an optional provider PR/MR title.
+   */
+  export interface Artifact {
+    /**
+     * Artifact URL.
+     */
+    url: string;
+
+    /**
+     * Known provider PR/MR title, when available.
+     */
+    title?: string;
+  }
+
   export interface Question {
     id: string;
 
