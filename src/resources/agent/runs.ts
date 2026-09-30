@@ -553,6 +553,13 @@ export interface RunItem {
   status_message?: RunItem.StatusMessage;
 
   /**
+   * The prompt exactly as it was submitted, without any extra context added by Warp.
+   * Includes any follow-up messages sent before the run started, separated by blank
+   * lines.
+   */
+  submitted_prompt?: string;
+
+  /**
    * URL to the run trigger (e.g. Slack thread, Linear issue, schedule)
    */
   trigger_url?: string;
