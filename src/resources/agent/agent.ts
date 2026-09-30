@@ -276,6 +276,11 @@ export interface AmbientAgentConfig {
   environment_id?: string;
 
   /**
+   * Internal per-Factory run configuration, populated only by the server.
+   */
+  experimental?: { [key: string]: string | number | boolean | null };
+
+  /**
    * Specifies which execution harness to use for the agent run. Default (nil/empty)
    * uses Warp's built-in harness. When stored as a named agent's default
    * (create/update agent identity), this field replaces the deprecated
