@@ -56,10 +56,7 @@
     "minimatch": "^9.0.7",
     "js-yaml": "4.3.2",
     "handlebars": "4.7.9",
-    "picomatch": ">=2.3.2",
-    "@humanfs/node": "^0.16.8",
-    "browserslist": "^4.28.7",
-    "baseline-browser-mapping": ">=2.11.0"
+    "picomatch": ">=2.3.2"
   },
   "pnpm": {
     "overrides": {
@@ -69,10 +66,7 @@
       "minimatch": "^9.0.7",
       "js-yaml": "4.3.2",
       "handlebars": "4.7.9",
-      "picomatch": ">=2.3.2",
-      "@humanfs/node": "^0.16.8",
-      "browserslist": "^4.28.7",
-      "baseline-browser-mapping": ">=2.11.0"
+      "picomatch": ">=2.3.2"
     }
   },
   "resolutions": {
@@ -82,10 +76,7 @@
     "minimatch": "^9.0.7",
     "js-yaml": "4.3.2",
     "handlebars": "4.7.9",
-    "picomatch": ">=2.3.2",
-    "@humanfs/node": "^0.16.8",
-    "browserslist": "^4.28.7",
-    "baseline-browser-mapping": ">=2.11.0"
+    "picomatch": ">=2.3.2"
   },
   "exports": {
     ".": {
