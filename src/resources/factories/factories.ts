@@ -176,6 +176,12 @@ export interface Factory {
    * The user who created a factory, when resolvable.
    */
   creator?: Factory.Creator;
+
+  /**
+   * Self-improvement settings from GitHub-managed Factory YAML. Omitted when none
+   * are declared, in which case team admins are the reviewer pool.
+   */
+  self_improvement?: Factory.SelfImprovement;
 }
 
 export namespace Factory {
@@ -464,6 +470,28 @@ export namespace Factory {
      * Creator's email, when available.
      */
     email?: string | null;
+  }
+
+  /**
+   * Self-improvement settings from GitHub-managed Factory YAML. Omitted when none
+   * are declared, in which case team admins are the reviewer pool.
+   */
+  export interface SelfImprovement {
+    /**
+     * Owning-team pool one eligible reviewer is randomly requested from for
+     * self-improvement pull requests. `admins` requests a team admin or owner and is
+     * the default when the Factory declares no self-improvement settings. `team`
+     * requests any team member. `custom` requests a member listed in
+     * `reviewer_emails`. `none` explicitly disables reviewer assignment.
+     */
+    reviewer_type: 'none' | 'admins' | 'team' | 'custom';
+
+    /**
+     * Owning-team member emails reviewers are chosen from. Only allowed when
+     * `reviewer_type` is `custom`: a Factory YAML change that sets emails with any
+     * other reviewer type fails validation, including the pull request check.
+     */
+    reviewer_emails?: Array<string>;
   }
 }
 
