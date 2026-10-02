@@ -374,7 +374,9 @@ export namespace AgentResponse {
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a harness other than `oz`; the top-level config model_id targets
      * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model.
+     * own default model. For an individual Warp-managed Factory Claude Code agent,
+     * send an explicit empty string to use the environment's model. Omitting model_id
+     * when replacing that agent's harness is invalid.
      */
     model_id?: string;
 
@@ -596,7 +598,9 @@ export namespace CreateAgentRequest {
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a harness other than `oz`; the top-level config model_id targets
      * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model.
+     * own default model. For an individual Warp-managed Factory Claude Code agent,
+     * send an explicit empty string to use the environment's model. Omitting model_id
+     * when replacing that agent's harness is invalid.
      */
     model_id?: string;
 
@@ -876,7 +880,9 @@ export namespace UpdateAgentRequest {
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a harness other than `oz`; the top-level config model_id targets
      * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model.
+     * own default model. For an individual Warp-managed Factory Claude Code agent,
+     * send an explicit empty string to use the environment's model. Omitting model_id
+     * when replacing that agent's harness is invalid.
      */
     model_id?: string;
 
@@ -1149,7 +1155,9 @@ export namespace AgentCreateParams {
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a harness other than `oz`; the top-level config model_id targets
      * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model.
+     * own default model. For an individual Warp-managed Factory Claude Code agent,
+     * send an explicit empty string to use the environment's model. Omitting model_id
+     * when replacing that agent's harness is invalid.
      */
     model_id?: string;
 
@@ -1418,7 +1426,9 @@ export namespace AgentUpdateParams {
      * Model to use with a third-party harness (e.g. "claude-haiku-4-5"). Only applies
      * when type is a harness other than `oz`; the top-level config model_id targets
      * the built-in Warp harness instead. When omitted or empty, the harness uses its
-     * own default model.
+     * own default model. For an individual Warp-managed Factory Claude Code agent,
+     * send an explicit empty string to use the environment's model. Omitting model_id
+     * when replacing that agent's harness is invalid.
      */
     model_id?: string;
 
