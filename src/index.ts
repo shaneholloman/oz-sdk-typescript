@@ -1,13 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { OzAPI as default } from './client';
+export { WarpClient as default } from './client';
 
 export { type Uploadable, toFile } from './core/uploads';
 export { APIPromise } from './core/api-promise';
-export { OzAPI, type ClientOptions } from './client';
+export { WarpClient, type ClientOptions } from './client';
 export { PagePromise } from './core/pagination';
 export {
-  OzAPIError,
+  WarpClientError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,

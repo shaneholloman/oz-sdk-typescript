@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "oz-agent-sdk/*": ["./dist/src/*"],
-      "oz-agent-sdk": ["./dist/src/index.ts"]
+      "@warp-dot-dev/warp-platform-sdk/*": ["./dist/src/*"],
+      "@warp-dot-dev/warp-platform-sdk": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

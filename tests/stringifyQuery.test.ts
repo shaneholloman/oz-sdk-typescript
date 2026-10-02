@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { stringifyQuery } from 'oz-agent-sdk/internal/utils/query';
+import { stringifyQuery } from '@warp-dot-dev/warp-platform-sdk/internal/utils/query';
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [

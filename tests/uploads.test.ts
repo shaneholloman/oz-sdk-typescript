@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from 'oz-agent-sdk/internal/to-file';
-import { toFile } from 'oz-agent-sdk/core/uploads';
+import type { ResponseLike } from '@warp-dot-dev/warp-platform-sdk/internal/to-file';
+import { toFile } from '@warp-dot-dev/warp-platform-sdk/core/uploads';
 
 class MyClass {
   name: string = 'foo';
@@ -96,7 +96,7 @@ describe('missing File error message', () => {
   });
 
   test('is thrown', async () => {
-    const uploads = await import('oz-agent-sdk/core/uploads');
+    const uploads = await import('@warp-dot-dev/warp-platform-sdk/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(

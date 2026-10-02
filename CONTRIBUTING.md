@@ -55,12 +55,12 @@ $ cd oz-sdk-typescript
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link oz-agent-sdk
+$ yarn link @warp-dot-dev/warp-platform-sdk
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link --global oz-agent-sdk
+$ pnpm link --global @warp-dot-dev/warp-platform-sdk
 ```
 
 ## Running tests

@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { OzAPIError } from './error';
+import { WarpClientError } from './error';
 import { FinalRequestOptions } from '../internal/request-options';
 import { defaultParseResponse } from '../internal/parse';
-import { type OzAPI } from '../client';
+import { type WarpClient } from '../client';
 import { APIPromise } from './api-promise';
 import { type APIResponseProps } from '../internal/parse';
 import { maybeObj } from '../internal/utils/values';
@@ -11,13 +11,13 @@ import { maybeObj } from '../internal/utils/values';
 export type PageRequestOptions = Pick<FinalRequestOptions, 'query' | 'headers' | 'body' | 'path' | 'method'>;
 
 export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
-  #client: OzAPI;
+  #client: WarpClient;
   protected options: FinalRequestOptions;
 
   protected response: Response;
   protected body: unknown;
 
-  constructor(client: OzAPI, response: Response, body: unknown, options: FinalRequestOptions) {
+  constructor(client: WarpClient, response: Response, body: unknown, options: FinalRequestOptions) {
     this.#client = client;
     this.options = options;
     this.response = response;
@@ -37,7 +37,7 @@ export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
   async getNextPage(): Promise<this> {
     const nextOptions = this.nextPageRequestOptions();
     if (!nextOptions) {
-      throw new OzAPIError(
+      throw new WarpClientError(
         'No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`.',
       );
     }
@@ -80,7 +80,7 @@ export class PagePromise<
   implements AsyncIterable<Item>
 {
   constructor(
-    client: OzAPI,
+    client: WarpClient,
     request: Promise<APIResponseProps>,
     Page: new (...args: ConstructorParameters<typeof AbstractPage>) => PageClass,
   ) {
@@ -133,7 +133,7 @@ export class RunsCursorPage<Item> extends AbstractPage<Item> implements RunsCurs
   page_info: RunsCursorPageResponse.PageInfo;
 
   constructor(
-    client: OzAPI,
+    client: WarpClient,
     response: Response,
     body: RunsCursorPageResponse<Item>,
     options: FinalRequestOptions,
@@ -201,7 +201,7 @@ export class FactoryInboxCursorPage<Item>
   page_info: FactoryInboxCursorPageResponse.PageInfo;
 
   constructor(
-    client: OzAPI,
+    client: WarpClient,
     response: Response,
     body: FactoryInboxCursorPageResponse<Item>,
     options: FinalRequestOptions,
@@ -269,7 +269,7 @@ export class FactoriesCursorPage<Item>
   page_info: FactoriesCursorPageResponse.PageInfo;
 
   constructor(
-    client: OzAPI,
+    client: WarpClient,
     response: Response,
     body: FactoriesCursorPageResponse<Item>,
     options: FinalRequestOptions,

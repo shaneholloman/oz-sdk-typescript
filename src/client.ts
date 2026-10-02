@@ -77,7 +77,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['OZ_API_BASE_URL'].
+   * Defaults to process.env['WARP_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -131,7 +131,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['OZ_API_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['WARP_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -144,9 +144,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Oz API API.
+ * API Client for interfacing with the Warp API.
  */
-export class OzAPI {
+export class WarpClient {
   apiKey: string;
 
   baseURL: string;
@@ -162,10 +162,10 @@ export class OzAPI {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Oz API API.
+   * API Client for interfacing with the Warp API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['WARP_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['OZ_API_BASE_URL'] ?? https://app.warp.dev/api/v1] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['WARP_BASE_URL'] ?? https://app.warp.dev/api/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -174,13 +174,13 @@ export class OzAPI {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('OZ_API_BASE_URL'),
+    baseURL = readEnv('WARP_BASE_URL'),
     apiKey = readEnv('WARP_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
-      throw new Errors.OzAPIError(
-        "The WARP_API_KEY environment variable is missing or empty; either provide it, or instantiate the OzAPI client with an apiKey option, like new OzAPI({ apiKey: 'My API Key' }).",
+      throw new Errors.WarpClientError(
+        "The WARP_API_KEY environment variable is missing or empty; either provide it, or instantiate the WarpClient client with an apiKey option, like new WarpClient({ apiKey: 'My API Key' }).",
       );
     }
 
@@ -191,21 +191,21 @@ export class OzAPI {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? OzAPI.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? WarpClient.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('OZ_API_LOG'), "process.env['OZ_API_LOG']", this) ??
+      parseLogLevel(readEnv('WARP_LOG'), "process.env['WARP_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
-    const customHeadersEnv = readEnv('OZ_API_CUSTOM_HEADERS');
+    const customHeadersEnv = readEnv('WARP_CUSTOM_HEADERS');
     if (customHeadersEnv) {
       const parsed: Record<string, string> = {};
       for (const line of customHeadersEnv.split('\n')) {
@@ -545,7 +545,7 @@ export class OzAPI {
     options: PromiseOrValue<FinalRequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
     const request = this.makeRequest(options, null, undefined);
-    return new Pagination.PagePromise<PageClass, Item>(this as any as OzAPI, request, Page);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as WarpClient, request, Page);
   }
 
   async fetchWithTimeout(
@@ -784,10 +784,10 @@ export class OzAPI {
     }
   }
 
-  static OzAPI = this;
+  static WarpClient = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static OzAPIError = Errors.OzAPIError;
+  static WarpClientError = Errors.WarpClientError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -813,10 +813,10 @@ export class OzAPI {
   factories: API.Factories = new API.Factories(this);
 }
 
-OzAPI.Agent = Agent;
-OzAPI.Factories = Factories;
+WarpClient.Agent = Agent;
+WarpClient.Factories = Factories;
 
-export declare namespace OzAPI {
+export declare namespace WarpClient {
   export type RequestOptions = Opts.RequestOptions;
 
   export import RunsCursorPage = Pagination.RunsCursorPage;
