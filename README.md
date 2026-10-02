@@ -37,9 +37,9 @@ You can configure the agent with a custom environment and other settings using t
 
 <!-- prettier-ignore -->
 ```ts
-import WarpAPI from 'warp-sdk';
+import WarpClient from '@warp-dot-dev/warp-platform-sdk';
 
-const client = new WarpAPI();
+const client = new WarpClient();
 
 const response = await client.agent.run({
   prompt: 'Fix the bug in auth.go',
@@ -51,7 +51,7 @@ const response = await client.agent.run({
   },
 });
 
-console.log(response.task_id);
+console.log(response.run_id);
 ```
 
 #### Configuration options
