@@ -518,6 +518,7 @@ export interface RunItem {
    * - LINEAR: Created from Linear integration
    * - API: Created via the Warp API
    * - SLACK: Created from Slack integration
+   * - TEAMS: Created from Microsoft Teams integration
    * - LOCAL: Created from local CLI/app
    * - SCHEDULED_AGENT: Created by a scheduled agent
    * - WEB_APP: Created from the Warp web app
@@ -1057,6 +1058,7 @@ export namespace RunItem {
  * - LINEAR: Created from Linear integration
  * - API: Created via the Warp API
  * - SLACK: Created from Slack integration
+ * - TEAMS: Created from Microsoft Teams integration
  * - LOCAL: Created from local CLI/app
  * - SCHEDULED_AGENT: Created by a scheduled agent
  * - WEB_APP: Created from the Warp web app
@@ -1082,6 +1084,7 @@ export type RunSourceType =
   | 'LINEAR'
   | 'API'
   | 'SLACK'
+  | 'TEAMS'
   | 'LOCAL'
   | 'SCHEDULED_AGENT'
   | 'WEB_APP'
